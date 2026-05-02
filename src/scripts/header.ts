@@ -39,11 +39,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeMenu();
 });
 
-// ── Scroll: sombra dinâmica na navbar + colapso do ribbon ──────────────────
-const ribbon = document.getElementById('top-ribbon');
+// ── Scroll: sombra dinâmica na navbar ────────────────────────────────────
 const navbar = document.getElementById('main-navbar');
-const navContent = document.getElementById('main-nav-content');
-const SCROLL_THRESHOLD = 50;
+const SCROLL_THRESHOLD = 10;
 
 let isScrolled = false;
 let ticking = false;
@@ -52,26 +50,10 @@ function applyScrollState(scrolled: boolean): void {
   if (scrolled === isScrolled) return;
   isScrolled = scrolled;
 
-  // Colapsa o ribbon ao ultrapassar a primeira dobra
-  const pastFold = window.scrollY > window.innerHeight;
-  if (pastFold) {
-    ribbon?.classList.remove('h-8');
-    ribbon?.classList.add('h-0', 'opacity-0', 'pointer-events-none');
-  } else {
-    ribbon?.classList.add('h-8');
-    ribbon?.classList.remove('h-0', 'opacity-0', 'pointer-events-none');
-  }
-
   if (scrolled) {
     navbar?.classList.add('shadow-md');
-    navbar?.classList.remove('border-b', 'border-border-light');
-    navContent?.classList.remove('h-20');
-    navContent?.classList.add('h-16');
   } else {
     navbar?.classList.remove('shadow-md');
-    navbar?.classList.add('border-b', 'border-border-light');
-    navContent?.classList.remove('h-16');
-    navContent?.classList.add('h-20');
   }
 }
 
@@ -91,5 +73,5 @@ window.addEventListener(
   { passive: true }
 );
 
-// Inicializa estado correto (cobre carregamento já com a página rolada)
+// Inicializa estado correto
 applyScrollState(window.scrollY > SCROLL_THRESHOLD);

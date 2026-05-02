@@ -23,10 +23,10 @@ const whatsappQuoteUrl = whatsappLink(whatsappMessages.quote);
 
 <header
   id="site-header"
-  class="fixed top-0 left-0 right-0 z-[var(--z-sticky)]"
+  class="relative z-[var(--z-sticky)]"
 >
   <!-- ── Ribbon utilitário (desktop) ── -->
-  <div id="top-ribbon" class="hidden md:block bg-anthracite transition-all duration-300 overflow-hidden">
+  <div id="top-ribbon" class="hidden md:block bg-anthracite">
     <div class="container-magsil">
       <div class="flex items-center justify-between h-8 text-[11px] text-text-on-dark">
         <div class="flex items-center gap-5">
@@ -80,9 +80,9 @@ const whatsappQuoteUrl = whatsappLink(whatsappMessages.quote);
   </div>
 
   <!-- ── Barra de navegação principal (clara) ── -->
-  <div class="bg-offwhite border-b border-border-light transition-all duration-300" id="main-navbar">
+  <div class="bg-offwhite border-b border-border-light sticky top-0 transition-shadow duration-300" id="main-navbar">
     <div class="container-magsil">
-      <nav class="flex items-center justify-between h-20 transition-all duration-300" id="main-nav-content" aria-label="Navegação principal">
+      <nav class="flex items-center justify-between h-20" id="main-nav-content" aria-label="Navegação principal">
 
         <!-- Logo -->
         <a href="/" class="flex items-center gap-2.5 group flex-shrink-0 focus-ring rounded-[var(--radius-sm)]" aria-label={`${business.name} - Página inicial`}>
