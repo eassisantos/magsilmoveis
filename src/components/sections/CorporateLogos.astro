@@ -1,0 +1,42 @@
+---
+import { Building, Hotel, Utensils, Briefcase, Landmark } from 'lucide-react';
+
+const partners = [
+  { name: 'Rede Hoteleira', icon: Hotel },
+  { name: 'Restaurantes', icon: Utensils },
+  { name: 'Construtoras', icon: Building },
+  { name: 'Escritórios', icon: Briefcase },
+  { name: 'Condomínios', icon: Landmark },
+];
+---
+<section class="py-10 bg-anthracite border-y border-anthracite-light overflow-hidden">
+  <div class="relative flex overflow-x-hidden group">
+    <!-- Gradient Masks for smooth edge fading -->
+    <div class="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-anthracite to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-anthracite to-transparent z-10 pointer-events-none"></div>
+
+    <div class="flex animate-marquee group-hover:animation-pause">
+      {[...partners, ...partners, ...partners, ...partners].map((partner) => (
+        <div class="flex items-center gap-3 px-12 text-offwhite/50 hover:text-gold transition-colors duration-base whitespace-nowrap">
+          <partner.icon className="w-6 h-6" aria-hidden="true" />
+          <span class="text-lg font-normal tracking-wide">{partner.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  
+  .animation-pause {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+</style>

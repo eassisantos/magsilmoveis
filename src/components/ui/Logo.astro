@@ -1,0 +1,21 @@
+---
+interface Props {
+  class?: string;
+  theme?: 'dark' | 'light';
+}
+
+const { class: className, theme = 'light' } = Astro.props;
+const textPrimary = theme === 'dark' ? 'text-text-inverse' : 'text-anthracite';
+---
+
+<div class:list={["flex items-center gap-2 group", className]}>
+  <!-- Tipografia Refinada -->
+  <div class="flex flex-col justify-center">
+    <span class:list={[
+      "text-[2rem] md:text-3xl font-normal font-[family-name:var(--font-logo)] leading-none tracking-wide transition-colors duration-base group-hover:text-gold", 
+      textPrimary
+    ]}>
+      Magsil <span class="text-gold font-[family-name:var(--font-sans)] text-[1rem] tracking-[0.1em] uppercase font-normal relative -top-1 ml-1">Móveis</span>
+    </span>
+  </div>
+</div>

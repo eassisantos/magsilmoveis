@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Award, Leaf, PenTool, Heart } from 'lucide-react';
+
+const milestones = [
+  { year: '2017', title: 'Fundação', desc: 'Início da produção artesanal em Arapiraca, Alagoas.' },
+  { year: '2020', title: 'Expansão', desc: 'Ampliação da linha de produtos para área externa.' },
+  { year: '2021', title: 'Corda Náutica', desc: 'Introdução do acabamento em corda náutica ao catálogo.' },
+  { year: '2022', title: 'Parcerias', desc: 'Início do atendimento consultivo para arquitetos e designers.' },
+  { year: '2023', title: 'Digital', desc: 'Lançamento da presença digital com e-commerce e blog.' },
+  { year: '2024', title: 'Crescimento', desc: 'Expansão nacional com entrega especializada em todo o Nordeste.' },
+];
+
+const values = [
+  { title: 'Qualidade Artesanal', desc: 'Cada peça é construída manualmente com rigoroso controle de qualidade.', Icon: Award },
+  { title: 'Sustentabilidade', desc: 'Materiais duráveis que reduzem desperdício e resistem ao tempo.', Icon: Leaf },
+  { title: 'Inovação', desc: 'Combinamos técnicas tradicionais com materiais e designs contemporâneos.', Icon: PenTool },
+  { title: 'Compromisso', desc: 'Prazos respeitados e suporte pós-venda para total satisfação.', Icon: Heart },
+];
+---
+
+<BaseLayout
+  title="Sobre Nós — Ateliê Artesanal desde 2017"
+  description="Conheça a história da Magsil Móveis — fabricante de móveis artesanais em fibra sintética e corda náutica desde 2017, em Arapiraca, Alagoas. Produzimos peças únicas com estrutura em alumínio naval."
+>
+  <!-- Hero -->
+  <section class="section-padding-sm bg-surface">
+    <div class="container-magsil">
+      <!-- Breadcrumb -->
+      <nav aria-label="Localização" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li class="text-text-primary font-medium" aria-current="page">Sobre Nós</li>
+        </ol>
+      </nav>
+      
+      <div class="max-w-3xl mx-auto text-center" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Nossa História</span>
+        <h1 class="mt-4 mb-6">Design que Nasce das Mãos</h1>
+        <p class="text-text-secondary text-lg leading-relaxed">
+          Desde 2017, a Magsil Móveis transforma metal, fibra sintética e corda náutica em peças de mobiliário que unem resistência, conforto e sofisticação. Cada móvel é uma expressão do nosso compromisso com o design autoral e a produção local.
+        </p>
+        <div class="w-16 h-0.5 bg-gold mx-auto mt-8"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="section-padding bg-offwhite">
+    <div class="container-magsil">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div data-animate>
+          <h2 class="mb-6">Da Oficina ao Seu Ambiente</h2>
+          <div class="space-y-4 text-text-secondary leading-relaxed">
+            <p>
+              Nascemos em Arapiraca, no coração de Alagoas, com a missão de criar móveis que contam histórias. Nossa produção combina a robustez das estruturas metálicas com a elegância dos acabamentos em fibra sintética e corda náutica.
+            </p>
+            <p>
+              Cada peça passa por um processo artesanal minucioso: do corte e solda do metal ao trançado manual da fibra. O resultado são móveis únicos, resistentes às intempéries e visualmente sofisticados.
+            </p>
+            <p>
+              Atendemos projetos residenciais, comerciais e corporativos, sempre com suporte consultivo completo — do briefing à instalação final.
+            </p>
+          </div>
+        </div>
+        <div class="relative" data-animate data-animate-delay="1">
+          <div class="aspect-square rounded-[var(--radius-lg)] bg-surface border border-border-light overflow-hidden">
+            <div class="w-full h-full flex items-center justify-center text-text-muted text-sm">
+              Foto da oficina / produção
+            </div>
+          </div>
+          <div class="absolute -bottom-4 -left-4 w-32 h-32 border-2 border-gold/30 rounded-[var(--radius-lg)]"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="section-padding bg-surface">
+    <div class="container-magsil">
+      <div class="text-center mb-16" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Trajetória</span>
+        <h2 class="mt-4">Nossa Jornada</h2>
+        <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+      </div>
+
+      <div class="max-w-3xl mx-auto">
+        {milestones.map((m, i) => (
+          <div
+            class="flex gap-6 mb-8 last:mb-0"
+            data-animate
+            data-animate-delay={String((i % 3) + 1)}
+          >
+            <div class="flex flex-col items-center">
+              <div class="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <span class="text-sm font-normal text-gold">{m.year}</span>
+              </div>
+              {i < milestones.length - 1 && <div class="w-px flex-1 bg-border mt-2"></div>}
+            </div>
+            <div class="pb-8">
+              <h3 class="text-lg font-normal mb-1">{m.title}</h3>
+              <p class="text-text-secondary text-sm">{m.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="section-padding bg-offwhite">
+    <div class="container-magsil">
+      <div class="text-center mb-16" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Valores</span>
+        <h2 class="mt-4">O Que nos Move</h2>
+        <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {values.map((v, i) => (
+          <div
+            class="text-center bg-surface rounded-[var(--radius-lg)] p-8 border border-border-light hover-lift"
+            data-animate
+            data-animate-delay={String(i + 1)}
+          >
+            <div class="w-12 h-12 bg-gold/10 rounded-[var(--radius-md)] flex items-center justify-center mb-4 mx-auto">
+              <v.Icon className="w-6 h-6 text-gold" aria-hidden="true" />
+            </div>
+            <h3 class="text-lg font-normal mb-3">{v.title}</h3>
+            <p class="text-text-secondary text-sm leading-relaxed">{v.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding bg-anthracite text-text-inverse">
+    <div class="container-magsil text-center">
+      <div class="max-w-xl mx-auto" data-animate>
+        <h2 class="text-offwhite mb-6">Vamos Conversar?</h2>
+        <p class="text-text-muted mb-8 leading-relaxed">
+          Se você busca peças exclusivas para transformar seus ambientes, entre em contato com nossa equipe.
+        </p>
+        <a
+          href="/contato"
+          class="inline-flex items-center justify-center min-h-[52px] px-8 bg-gold text-anthracite text-base font-normal rounded-[var(--radius-md)] hover:bg-gold-light transition-all duration-base shadow-gold"
+        >
+          Fale Conosco
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

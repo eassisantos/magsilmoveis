@@ -1,0 +1,70 @@
+---
+import { LayoutDashboard, Users, FileText, Package, MessageSquare, LogOut, ExternalLink } from 'lucide-react';
+
+const user = Astro.locals.user;
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+  { href: '/admin/produtos', icon: Package, label: 'Produtos', exact: false },
+  { href: '/admin/leads', icon: Users, label: 'Leads', exact: false },
+  { href: '/admin/posts', icon: FileText, label: 'Posts', exact: false },
+  { href: '/admin/depoimentos', icon: MessageSquare, label: 'Depoimentos', exact: false },
+];
+
+function isActive(href: string, exact: boolean): boolean {
+  if (exact) return pathname === href || pathname === href + '/';
+  return pathname.startsWith(href);
+}
+---
+
+<aside class="w-14 bg-[#2D1B1B] flex flex-col fixed top-0 left-0 h-full z-20">
+  <!-- Logo -->
+  <div class="h-14 flex items-center justify-center shrink-0">
+    <a href="/admin" title="Magsil Móveis Admin"
+      class="w-9 h-9 rounded-lg bg-[#C4A882] flex items-center justify-center font-bold text-sm text-[#2D1B1B] select-none">
+      M
+    </a>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 py-2 flex flex-col items-center overflow-hidden" aria-label="Navegação administrativa">
+    <ul class="space-y-0.5 w-full px-2">
+      {navItems.map(({ href, icon: Icon, label, exact }) => (
+        <li>
+          <a
+            href={href}
+            title={label}
+            class={`flex items-center justify-center w-full h-10 rounded-lg transition-colors ${isActive(href, exact) ? 'bg-[#4A2E2E] text-[#D4B89A]' : 'text-[#7D6560] hover:text-[#D4B89A] hover:bg-[#3D2525]'}`}
+          >
+            <Icon className="w-[18px] h-[18px]" strokeWidth={isActive(href, exact) ? 2 : 1.75} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <!-- Bottom -->
+  <div class="py-2 px-2 border-t border-[#3D2525] flex flex-col items-center gap-0.5">
+    <div class="w-8 h-8 mb-2 bg-[#C4A882] rounded-full flex items-center justify-center text-[10px] font-bold text-[#2D1B1B]" title={user?.email || 'Admin'}>
+      {user?.email?.charAt(0).toUpperCase() || 'A'}
+    </div>
+    <a
+      href="/"
+      target="_blank"
+      title="Ver Site"
+      class="flex items-center justify-center w-full h-10 rounded-lg text-[#7D6560] hover:text-[#D4B89A] hover:bg-[#3D2525] transition-colors"
+    >
+      <ExternalLink className="w-[18px] h-[18px]" strokeWidth={1.75} />
+    </a>
+    <form action="/api/auth/logout" method="POST" class="w-full">
+      <button
+        type="submit"
+        title="Sair"
+        class="w-full flex items-center justify-center h-10 rounded-lg text-[#7D6560] hover:text-[#ef9090] hover:bg-[#3D2525] transition-colors"
+      >
+        <LogOut className="w-[18px] h-[18px]" strokeWidth={1.75} />
+      </button>
+    </form>
+  </div>
+</aside>

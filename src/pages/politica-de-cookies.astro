@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business, whatsappLink } from '@/config/business';
+
+const title       = 'Política de Cookies | Magsil Móveis';
+const description = 'Entenda quais cookies o site magsilmoveis.com.br utiliza, para que servem e como você pode gerenciá-los ou desativá-los.';
+const canonical   = 'https://www.magsilmoveis.com.br/politica-de-cookies';
+const updatedAt   = '2 de maio de 2026';
+---
+
+<BaseLayout {title} {description} {canonical}>
+  <slot name="head" slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Política de Cookies — Magsil Móveis",
+      "description": description,
+      "url": canonical,
+      "inLanguage": "pt-BR",
+      "dateModified": "2026-05-02",
+      "publisher": {
+        "@type": "Organization",
+        "name": business.name,
+        "legalName": business.legalName,
+        "url": "https://www.magsilmoveis.com.br"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.magsilmoveis.com.br" },
+          { "@type": "ListItem", "position": 2, "name": "Política de Cookies", "item": canonical }
+        ]
+      }
+    })} />
+  </slot>
+
+  <article class="section-padding bg-offwhite">
+    <div class="container-narrow">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="Localização" class="mb-8">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li class="text-text-primary font-medium" aria-current="page">Política de Cookies</li>
+        </ol>
+      </nav>
+
+      <!-- Header do artigo -->
+      <header class="mb-10 pb-8 border-b border-border-light">
+        <span class="text-gold text-xs font-normal uppercase tracking-eyebrow-wide block mb-3">Transparência Digital</span>
+        <h1 class="text-balance mb-3">Política de Cookies</h1>
+        <p class="text-sm text-text-muted">
+          Última atualização: <time datetime="2026-05-02">{updatedAt}</time>
+        </p>
+        <p class="mt-4 text-text-secondary leading-relaxed">
+          Esta política explica o que são cookies, quais utilizamos em <strong class="text-text-primary">magsilmoveis.com.br</strong>, para que servem e como você pode gerenciá-los. Utilizamos cookies de forma responsável e em conformidade com a <strong>LGPD (Lei nº 13.709/2018)</strong>.
+        </p>
+      </header>
+
+      <!-- Conteúdo -->
+      <div class="space-y-10">
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">1. O que são Cookies?</h2>
+          <p class="text-text-secondary leading-relaxed">
+            Cookies são pequenos arquivos de texto armazenados no seu navegador ou dispositivo quando você visita um site. Eles permitem que o site reconheça seu dispositivo em visitas futuras, lembre preferências e colete informações sobre como você interage com o conteúdo. Os cookies em si não contêm vírus nem programas maliciosos.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">2. Tipos de Cookies que Utilizamos</h2>
+
+          <div class="space-y-6">
+
+            <!-- Essenciais -->
+            <div class="bg-surface rounded-[var(--radius-lg)] p-6 border border-border-light">
+              <div class="flex items-start gap-3 mb-3">
+                <span class="inline-block bg-gold/10 text-gold text-xs font-normal uppercase tracking-widest px-3 py-1 rounded-full flex-shrink-0">Essenciais</span>
+                <span class="text-xs text-text-muted pt-1">Sempre ativos · Não requerem consentimento</span>
+              </div>
+              <p class="text-text-secondary text-sm leading-relaxed mb-3">
+                Necessários para o funcionamento básico do site. Sem eles, funcionalidades essenciais como o painel administrativo não funcionam.
+              </p>
+              <table class="w-full text-xs text-text-secondary border-collapse">
+                <thead>
+                  <tr class="border-b border-border-light">
+                    <th class="text-left py-2 pr-4 font-normal text-text-primary w-1/3">Cookie</th>
+                    <th class="text-left py-2 pr-4 font-normal text-text-primary w-1/3">Finalidade</th>
+                    <th class="text-left py-2 font-normal text-text-primary">Duração</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-light/50">
+                  <tr>
+                    <td class="py-2 pr-4 font-mono">sb-access-token</td>
+                    <td class="py-2 pr-4">Autenticação do painel admin (Supabase)</td>
+                    <td class="py-2">Sessão</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 pr-4 font-mono">sb-refresh-token</td>
+                    <td class="py-2 pr-4">Renovação de sessão admin (Supabase)</td>
+                    <td class="py-2">7 dias</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Funcionais -->
+            <div class="bg-surface rounded-[var(--radius-lg)] p-6 border border-border-light">
+              <div class="flex items-start gap-3 mb-3">
+                <span class="inline-block bg-anthracite/5 text-text-secondary text-xs font-normal uppercase tracking-widest px-3 py-1 rounded-full flex-shrink-0">Preferências</span>
+                <span class="text-xs text-text-muted pt-1">Opcionais · Requerem consentimento</span>
+              </div>
+              <p class="text-text-secondary text-sm leading-relaxed mb-3">
+                Armazenam preferências do usuário para melhorar a experiência de navegação.
+              </p>
+              <table class="w-full text-xs text-text-secondary border-collapse">
+                <thead>
+                  <tr class="border-b border-border-light">
+                    <th class="text-left py-2 pr-4 font-normal text-text-primary w-1/3">Cookie</th>
+                    <th class="text-left py-2 pr-4 font-normal text-text-primary w-1/3">Finalidade</th>
+                    <th class="text-left py-2 font-normal text-text-primary">Duração</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border-light/50">
+                  <tr>
+                    <td class="py-2 pr-4 font-mono">magsil_cookie_consent</td>
+                    <td class="py-2 pr-4">Registra sua escolha de consentimento de cookies</td>
+                    <td class="py-2">1 ano</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Análise -->
+            <div class="bg-surface rounded-[var(--radius-lg)] p-6 border border-border-light">
+              <div class="flex items-start gap-3 mb-3">
+                <span class="inline-block bg-anthracite/5 text-text-secondary text-xs font-normal uppercase tracking-widest px-3 py-1 rounded-full flex-shrink-0">Análise</span>
+                <span class="text-xs text-text-muted pt-1">Opcionais · Requerem consentimento</span>
+              </div>
+              <p class="text-text-secondary text-sm leading-relaxed">
+                Atualmente <strong class="text-text-primary">não utilizamos</strong> cookies de análise, rastreamento ou publicidade de terceiros (como Google Analytics ou Meta Pixel). Esta seção será atualizada caso venha a ser implementado algum serviço de análise, com listagem completa dos cookies envolvidos e opção de consentimento.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">3. Cookies de Terceiros</h2>
+          <p class="text-text-secondary leading-relaxed mb-3">
+            O site pode carregar recursos de serviços externos que definem seus próprios cookies:
+          </p>
+          <ul class="space-y-2 text-text-secondary text-sm leading-relaxed">
+            <li class="flex gap-2"><span class="text-gold flex-shrink-0">•</span><span><strong class="text-text-primary">WhatsApp (Meta):</strong> ao clicar em links de WhatsApp, você é redirecionado ao app/site do WhatsApp, que tem sua própria política de privacidade.</span></li>
+            <li class="flex gap-2"><span class="text-gold flex-shrink-0">•</span><span><strong class="text-text-primary">Google Maps:</strong> links de localização redirecionam ao Google Maps, sujeito às políticas do Google.</span></li>
+            <li class="flex gap-2"><span class="text-gold flex-shrink-0">•</span><span><strong class="text-text-primary">Instagram:</strong> links para o perfil @magsilmoveis redirecionam ao Instagram (Meta), sujeito às suas políticas.</span></li>
+          </ul>
+          <p class="mt-3 text-sm text-text-muted">
+            Esses cookies de terceiros estão fora do nosso controle. Recomendamos consultar as políticas de privacidade de cada serviço.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">4. Como Gerenciar os Cookies</h2>
+          <p class="text-text-secondary leading-relaxed mb-4">
+            Você pode gerenciar ou desativar cookies diretamente pelas configurações do seu navegador. Note que desativar cookies essenciais pode impedir o funcionamento de algumas partes do site.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { name: 'Google Chrome', url: 'https://support.google.com/chrome/answer/95647' },
+              { name: 'Mozilla Firefox', url: 'https://support.mozilla.org/pt-BR/kb/cookies-informacoes-que-sites-armazenam-no-seu-computador' },
+              { name: 'Safari', url: 'https://support.apple.com/pt-br/guide/safari/sfri11471/mac' },
+              { name: 'Microsoft Edge', url: 'https://support.microsoft.com/pt-br/windows/gerenciar-cookies-no-microsoft-edge-168dab11-0753-043d-7c16-ede5947fc64d' },
+            ].map((browser) => (
+              <a
+                href={browser.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-2 px-4 py-3 bg-surface border border-border-light rounded-[var(--radius-md)] text-sm text-text-secondary hover:border-gold hover:text-gold transition-all duration-base"
+              >
+                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                {browser.name}
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">5. Alterações nesta Política</h2>
+          <p class="text-text-secondary leading-relaxed">
+            Esta política pode ser atualizada periodicamente, especialmente caso novos serviços que utilizem cookies sejam implementados. A data de "Última atualização" no topo desta página indica a revisão mais recente.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-normal mb-4 text-anthracite">6. Contato</h2>
+          <p class="text-text-secondary leading-relaxed mb-3">Dúvidas sobre o uso de cookies neste site:</p>
+          <ul class="space-y-1 text-text-secondary text-sm leading-relaxed">
+            <li><strong class="text-text-primary">E-mail:</strong> <a href={`mailto:${business.email}`} class="text-gold hover:underline">{business.email}</a></li>
+            <li><strong class="text-text-primary">WhatsApp:</strong> <a href={whatsappLink()} class="text-gold hover:underline" rel="noopener noreferrer" target="_blank">{business.phone.formatted}</a></li>
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- Links relacionados -->
+      <nav aria-label="Documentos legais relacionados" class="mt-12 pt-8 border-t border-border-light">
+        <p class="text-xs text-text-muted uppercase tracking-widest mb-4">Ver também</p>
+        <div class="flex flex-wrap gap-3">
+          <a href="/politica-de-privacidade" class="inline-flex items-center px-4 py-2 text-sm font-normal border border-border-light rounded-[var(--radius-md)] text-text-secondary hover:border-gold hover:text-gold transition-all duration-base">
+            Política de Privacidade
+          </a>
+          <a href="/termos-de-uso" class="inline-flex items-center px-4 py-2 text-sm font-normal border border-border-light rounded-[var(--radius-md)] text-text-secondary hover:border-gold hover:text-gold transition-all duration-base">
+            Termos de Uso
+          </a>
+        </div>
+      </nav>
+
+    </div>
+  </article>
+</BaseLayout>

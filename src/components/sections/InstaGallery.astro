@@ -1,0 +1,93 @@
+---
+import { Heart } from 'lucide-react';
+import InstagramIcon from '../ui/icons/InstagramIcon.astro';
+
+const lifestyleImages = [
+  { src: '/images/lifestyle/poolside.png', alt: 'Chaises de fibra sintética à beira da piscina ao pôr do sol' },
+  { src: '/images/lifestyle/balcony.png', alt: 'Varanda gourmet com poltronas de corda náutica e vista para a cidade' },
+  { src: '/images/lifestyle/garden.png', alt: 'Jantar ao ar livre com conjunto de mesa rattan em jardim iluminado' },
+  { src: '/images/lifestyle/veranda.png', alt: 'Sofá de canto em fibra sintética em varanda tropical coberta' },
+  { src: '/images/lifestyle/restaurant.png', alt: 'Restaurante à beira-mar com cadeiras de fibra sintética' },
+];
+
+const token = import.meta.env.INSTAGRAM_ACCESS_TOKEN;
+let igImages: Array<{src: string, alt: string, link: string}> = [];
+
+if (token) {
+  try {
+    const res = await fetch(`https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,caption&access_token=${token}&limit=10`);
+    const data = await res.json();
+    if (data.data) {
+      igImages = data.data
+        .filter((item: any) => item.media_type === 'IMAGE' || item.media_type === 'CAROUSEL_ALBUM')
+        .slice(0, 5)
+        .map((item: any) => ({
+          src: item.media_url,
+          alt: item.caption || 'Publicação do Instagram por Magsil Móveis',
+          link: item.permalink
+        }));
+    }
+  } catch (error) {
+    console.error('Erro ao buscar feed do Instagram:', error);
+  }
+}
+
+// Fallback para os placeholders caso falhe, não tenha token ou não retorne imagens suficientes
+const displayImages = igImages.length >= 5 
+  ? igImages 
+  : lifestyleImages.map(img => ({ ...img, link: 'https://www.instagram.com/magsilmoveis/' }));
+---
+<section id="inspiracoes" class="section-padding bg-offwhite">
+  <div class="container-magsil">
+    <div class="text-center mb-10" data-animate>
+      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Inspirações</span>
+      <h2 class="mt-4 text-balance">Magsil no Seu Ambiente</h2>
+      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+    </div>
+
+    <!-- Social proof stats acima do grid -->
+    <div class="flex flex-wrap items-center justify-center gap-6 mb-8 text-sm text-text-secondary" data-animate>
+      <span><strong class="text-text-primary font-normal">+3,2 mil</strong> seguidores</span>
+      <span class="w-1 h-1 rounded-full bg-border inline-block"></span>
+      <span><strong class="text-text-primary font-normal">+500</strong> publicações</span>
+      <span class="w-1 h-1 rounded-full bg-border inline-block"></span>
+      <span>Conteúdo novo toda semana</span>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3" data-animate data-animate-delay="1">
+      {displayImages.map((img) => (
+        <a 
+          href={img.link} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="group relative aspect-square rounded-[var(--radius-md)] overflow-hidden block"
+          aria-label={`Ver no Instagram: ${img.alt}`}
+        >
+          <img 
+            src={img.src} 
+            alt={img.alt} 
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[600ms] ease-out"
+            loading="lazy"
+          />
+          <!-- Hover overlay -->
+          <div class="absolute inset-0 bg-anthracite/60 opacity-0 group-hover:opacity-100 transition-opacity duration-base flex items-center justify-center gap-4">
+            <Heart className="w-6 h-6 text-offwhite" aria-hidden="true" />
+            <InstagramIcon class="w-6 h-6 text-offwhite" aria-hidden="true" />
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="text-center mt-8" data-animate data-animate-delay="2">
+      <a 
+        href="https://www.instagram.com/magsilmoveis/" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="inline-flex items-center gap-2 text-sm font-normal text-gold hover:text-gold-light transition-colors duration-base min-h-[48px]"
+      >
+        <InstagramIcon class="w-5 h-5" aria-hidden="true" />
+        Siga @magsilmoveis no Instagram
+      </a>
+    </div>
+  </div>
+</section>

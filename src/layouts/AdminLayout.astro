@@ -1,0 +1,77 @@
+---
+import AdminSidebar from '../components/admin/AdminSidebar.astro';
+import AdminTopbar from '../components/admin/AdminTopbar.astro';
+
+export const prerender = false;
+
+interface Props {
+  title: string;
+  breadcrumb?: string;
+}
+
+const { title, breadcrumb } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} | Admin</title>
+    <style>
+      @import 'tailwindcss';
+
+      @theme {
+        /* Sidebar */
+        --color-admin-sidebar: #2D1B1B;
+        --color-admin-sidebar-active: #4A2E2E;
+        /* Main */
+        --color-admin-bg: #F5F2EE;
+        --color-admin-surface: #FFFFFF;
+        --color-admin-surface-hover: #F9F7F4;
+        --color-admin-border: #E8E3DC;
+        --color-admin-text: #1A1210;
+        --color-admin-text-muted: #7A6D65;
+        /* Accent */
+        --color-admin-accent: #2D1B1B;
+        --color-admin-accent-hover: #3D2525;
+        /* Status */
+        --color-admin-success: #16a34a;
+        --color-admin-warning: #d97706;
+        --color-admin-danger: #dc2626;
+        --font-admin: system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        font-family: var(--font-admin);
+        background: var(--color-admin-bg);
+        color: var(--color-admin-text);
+      }
+
+      ::-webkit-scrollbar { width: 5px; height: 5px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #c8bdb7; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #a89890; }
+    </style>
+  </head>
+
+  <body class="min-h-screen flex overflow-hidden">
+    <AdminSidebar />
+
+    <main class="flex-1 ml-14 h-screen overflow-y-auto bg-admin-bg flex flex-col">
+      <AdminTopbar title={title} />
+
+      <div class="p-6 md:p-8 text-admin-text max-w-[1400px] w-full flex-grow mx-auto">
+        {breadcrumb && (
+          <nav class="flex items-center gap-2 text-sm mb-6" aria-label="Breadcrumb">
+            <a href="/admin" class="text-admin-text-muted hover:text-admin-text transition-colors">Dashboard</a>
+            <span class="text-admin-text-muted">/</span>
+            <span class="text-admin-text font-medium">{breadcrumb}</span>
+          </nav>
+        )}
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>

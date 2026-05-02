@@ -1,0 +1,285 @@
+---
+/**
+ * Chat widget — fluxo guiado, sem dependência externa, sem IA.
+ *
+ * Toda a copy de mensagens do WhatsApp vem de `whatsappMessages` em
+ * src/config/business.ts. As URLs são geradas em build no frontmatter e
+ * passadas ao script via `define:vars`.
+ */
+import { business, whatsappLink, whatsappMessages } from '../../config/business';
+import { MessageSquare, X, ArrowLeft, ShieldCheck } from 'lucide-react';
+
+const chatLinks = {
+  catalog: whatsappLink(whatsappMessages.catalog),
+  quote: whatsappLink(whatsappMessages.quoteCustom),
+  custom: whatsappLink(whatsappMessages.custom),
+  faq: whatsappLink(whatsappMessages.faq),
+  plain: whatsappLink(),
+};
+---
+
+<!-- Trigger button (substitui o botão clássico do WhatsApp) -->
+<div id="chat-widget" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[var(--z-toast)]">
+
+  <!-- Botão de toggle -->
+  <button
+    id="chat-toggle"
+    type="button"
+    class="relative w-12 h-12 md:w-14 md:h-14 bg-gold hover:bg-gold-light text-anthracite rounded-full flex items-center justify-center shadow-lg transition-all duration-base"
+    aria-label="Abrir chat de atendimento"
+    aria-expanded="false"
+    aria-controls="chat-panel"
+  >
+    <!-- Ícone: chat -->
+    <MessageSquare id="chat-icon-open" className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
+    <!-- Ícone: fechar -->
+    <X id="chat-icon-close" className="w-5 h-5 md:w-6 md:h-6 hidden" aria-hidden="true" />
+    <!-- Ponto de notificação -->
+    <span id="chat-dot" class="absolute top-0 right-0 md:top-0.5 md:right-0.5 w-3 h-3 md:w-3 md:h-3 bg-anthracite rounded-full border-2 border-gold animate-pulse" aria-hidden="true"></span>
+  </button>
+
+  <!-- Painel do chat -->
+  <div
+    id="chat-panel"
+    class="absolute bottom-[4rem] md:bottom-[4.5rem] right-0 w-[calc(100vw-2rem)] sm:w-80 max-w-[360px] bg-offwhite rounded-[var(--radius-lg)] shadow-xl border border-border-light overflow-hidden
+           transform translate-y-3 opacity-0 pointer-events-none transition-all duration-[220ms] ease-out"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="chat-panel-heading"
+  >
+    <!-- Cabeçalho -->
+    <div class="bg-anthracite px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="w-4 h-4 text-gold" aria-hidden="true" />
+        </div>
+        <div>
+          <p id="chat-panel-heading" class="text-sm font-normal text-offwhite leading-tight">{business.name}</p>
+          <p class="text-[11px] text-text-on-dark flex items-center gap-1 mt-0.5">
+            <span class="w-1.5 h-1.5 bg-green-400 rounded-full inline-block" aria-hidden="true"></span>
+            Online agora
+          </p>
+        </div>
+      </div>
+      <button
+        id="chat-close-btn"
+        type="button"
+        class="text-text-on-dark hover:text-offwhite transition-colors min-h-[32px] min-w-[32px] flex items-center justify-center rounded"
+        aria-label="Fechar chat"
+      >
+        <X className="w-4 h-4" aria-hidden="true" />
+      </button>
+    </div>
+
+    <!-- Área de mensagens -->
+    <div id="chat-messages" class="p-4 space-y-3 max-h-72 overflow-y-auto scroll-smooth">
+      <!-- Injetado pelo JS -->
+    </div>
+
+    <!-- Rodapé -->
+    <div class="px-4 py-2 border-t border-border-light bg-surface">
+      <p class="text-[10px] text-text-muted text-center">
+        Atendimento humano via
+        <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" class="text-gold hover:underline">{business.phone.formatted}</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ chatLinks }}>
+  /* chatLinks é injetado pelo Astro via `define:vars`:
+     { catalog, quote, custom, faq, plain } — todas strings de URL wa.me. */
+
+  document.addEventListener('astro:page-load', () => {
+    const flows = {
+    catalog: {
+      text: 'Temos poltronas, chaises, conjuntos de jantar, espreguiçadeiras e muito mais — todos com acabamento artesanal em fibra sintética ou corda náutica.',
+      ctas: [
+        { label: 'Ver Catálogo Completo', href: '/catalogo', style: 'primary' },
+        { label: 'Perguntar pelo WhatsApp', href: chatLinks.catalog, style: 'outline' },
+      ],
+    },
+    quote: {
+      text: 'Ótimo! Fazemos orçamentos sem compromisso, com prazo e valor detalhados. Como prefere continuar?',
+      ctas: [
+        { label: 'Preencher Formulário', href: '/contato', style: 'primary' },
+        { label: 'Resposta Rápida via WhatsApp', href: chatLinks.quote, style: 'outline' },
+      ],
+    },
+    custom: {
+      text: 'Trabalhamos com projetos 100% sob medida — cores, texturas e dimensões personalizadas. Inclui visita técnica e projeto 3D para aprovação.',
+      ctas: [
+        { label: 'Falar com Especialista', href: chatLinks.custom, style: 'gold' },
+        { label: 'Ver projetos no catálogo', href: '/catalogo', style: 'outline' },
+      ],
+    },
+    faq: {
+      text: 'Nossos móveis resistem a sol, chuva e maresia (fibra sintética UV + alumínio naval). Prazo médio: 15–30 dias úteis. Entregamos em todo o Brasil.',
+      ctas: [
+        { label: 'Ver Perguntas Frequentes', href: '/#faq', style: 'primary' },
+        { label: 'Tirar dúvida pelo WhatsApp', href: chatLinks.faq, style: 'outline' },
+      ],
+    },
+  };
+
+  const icons = {
+    catalog: '<svg class="w-4 h-4 text-gold flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="21" y1="21" y2="21"/><line x1="8" x2="8" y1="17" y2="21"/><line x1="16" x2="16" y1="17" y2="21"/></svg>',
+    quote: '<svg class="w-4 h-4 text-gold flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    custom: '<svg class="w-4 h-4 text-gold flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    faq: '<svg class="w-4 h-4 text-gold flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>'
+  };
+
+  const mainOptions = [
+    { key: 'catalog', icon: icons.catalog, label: 'Ver produtos / catálogo' },
+    { key: 'quote',   icon: icons.quote, label: 'Solicitar orçamento' },
+    { key: 'custom',  icon: icons.custom, label: 'Projeto sob medida' },
+    { key: 'faq',     icon: icons.faq, label: 'Dúvidas frequentes' },
+  ];
+
+  /* ── DOM refs ── */
+  const toggle    = document.getElementById('chat-toggle');
+  const closeBtn  = document.getElementById('chat-close-btn');
+  const panel     = document.getElementById('chat-panel');
+  const messages  = document.getElementById('chat-messages');
+  const iconOpen  = document.getElementById('chat-icon-open');
+  const iconClose = document.getElementById('chat-icon-close');
+  const dot       = document.getElementById('chat-dot');
+
+  let isOpen = false;
+  let initialized = false;
+
+  /* ── Open / close ── */
+  function open() {
+    isOpen = true;
+    panel.classList.remove('translate-y-3', 'opacity-0', 'pointer-events-none');
+    panel.classList.add('translate-y-0', 'opacity-100');
+    toggle.setAttribute('aria-expanded', 'true');
+    iconOpen.classList.add('hidden');
+    iconClose.classList.remove('hidden');
+    dot.classList.add('hidden');
+    if (!initialized) { initialized = true; showWelcome(); }
+  }
+
+  function close() {
+    isOpen = false;
+    panel.classList.add('translate-y-3', 'opacity-0', 'pointer-events-none');
+    panel.classList.remove('translate-y-0', 'opacity-100');
+    toggle.setAttribute('aria-expanded', 'false');
+    iconOpen.classList.remove('hidden');
+    iconClose.classList.add('hidden');
+    toggle.focus();
+  }
+
+  toggle.addEventListener('click', () => isOpen ? close() : open());
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) close(); });
+
+  /* ── Helpers ── */
+  function scrollBottom() {
+    requestAnimationFrame(() => { messages.scrollTop = messages.scrollHeight; });
+  }
+
+  function makeBotBubble(html) {
+    const wrap = document.createElement('div');
+    wrap.className = 'flex gap-2 items-start';
+    wrap.innerHTML = `
+      <div class="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
+        <svg class="w-3 h-3 text-gold" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+      </div>
+      <div class="bg-surface border border-border-light rounded-[var(--radius-md)] rounded-tl-none px-3 py-2 text-sm text-text-primary leading-relaxed" style="max-width:220px">${html}</div>
+    `;
+    return wrap;
+  }
+
+  function makeOptionBtn(label, icon, onClick) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'w-full text-left text-sm px-3 py-2.5 bg-offwhite hover:bg-surface border border-border-light hover:border-gold rounded-[var(--radius-md)] transition-all duration-[180ms] flex items-center gap-2.5 min-h-[44px] font-normal text-text-primary group';
+    btn.innerHTML = `<span aria-hidden="true" class="opacity-80 group-hover:opacity-100 transition-opacity">${icon}</span><span>${label}</span>`;
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  function makeCtaBtn(label, href, style) {
+    const a = document.createElement('a');
+    a.href = href;
+    if (href.startsWith('http')) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    const base = 'block text-center text-sm font-normal min-h-[44px] flex items-center justify-center rounded-[var(--radius-md)] transition-colors duration-base px-4';
+    const variant =
+      style === 'gold'    ? 'bg-gold hover:bg-gold-light text-anthracite' :
+      style === 'primary' ? 'bg-anthracite hover:bg-anthracite-light text-offwhite' :
+                            'border border-border-light hover:border-gold hover:text-gold text-text-secondary';
+    a.className = `${base} ${variant}`;
+    a.textContent = label;
+    return a;
+  }
+
+  function makeBackBtn() {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'text-xs text-text-muted hover:text-gold transition-colors duration-base flex items-center gap-1 min-h-[36px]';
+    btn.innerHTML = `<svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>Voltar ao menu`;
+    btn.addEventListener('click', () => { messages.innerHTML = ''; showWelcome(); });
+    return btn;
+  }
+
+  /* ── Screens ── */
+  function showWelcome() {
+    messages.innerHTML = '';
+    messages.appendChild(makeBotBubble('Olá! Seja bem-vindo à <strong>Magsil Móveis</strong>. Como posso ajudar?'));
+
+    const opts = document.createElement('div');
+    opts.className = 'ml-8 space-y-1.5';
+    mainOptions.forEach(({ key, label, icon }) => {
+      opts.appendChild(makeOptionBtn(label, icon, () => showFlow(key)));
+    });
+    messages.appendChild(opts);
+    scrollBottom();
+  }
+
+  function showFlow(key) {
+    const flow = flows[key];
+    if (!flow) return;
+    messages.innerHTML = '';
+    messages.appendChild(makeBotBubble(flow.text));
+
+    const ctas = document.createElement('div');
+    ctas.className = 'ml-8 space-y-2 mt-1';
+    flow.ctas.forEach(({ label, href, style }) => ctas.appendChild(makeCtaBtn(label, href, style)));
+    messages.appendChild(ctas);
+
+    const back = document.createElement('div');
+    back.className = 'ml-8 mt-2';
+    back.appendChild(makeBackBtn());
+    messages.appendChild(back);
+    scrollBottom();
+  }
+
+  /* ── Proactive bubble ── */
+  let proactiveDismissed = false;
+  const proactiveBubble = document.createElement('div');
+  proactiveBubble.id = 'chat-proactive';
+  proactiveBubble.className = 'absolute top-1/2 -translate-y-1/2 right-[4rem] md:right-[4.5rem] bg-anthracite text-offwhite text-xs font-normal px-3 py-2 rounded-[var(--radius-md)] shadow-md whitespace-nowrap opacity-0 transition-opacity duration-[300ms] pointer-events-none';
+  proactiveBubble.setAttribute('aria-hidden', 'true');
+  proactiveBubble.textContent = 'Posso ajudar?';
+  document.getElementById('chat-widget').appendChild(proactiveBubble);
+
+  setTimeout(() => {
+    if (!proactiveDismissed && !isOpen) {
+      proactiveBubble.classList.remove('opacity-0');
+      proactiveBubble.classList.add('opacity-100', 'pointer-events-auto');
+    }
+  }, 6000);
+
+  setTimeout(() => {
+    proactiveBubble.classList.remove('opacity-100', 'pointer-events-auto');
+    proactiveBubble.classList.add('opacity-0', 'pointer-events-none');
+  }, 12000);
+
+  toggle.addEventListener('click', () => {
+    proactiveDismissed = true;
+    proactiveBubble.classList.remove('opacity-100', 'pointer-events-auto');
+    proactiveBubble.classList.add('opacity-0', 'pointer-events-none');
+  });
+  });
+</script>

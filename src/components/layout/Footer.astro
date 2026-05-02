@@ -1,0 +1,348 @@
+---
+import { Award, ShieldCheck, Truck, Palette, Mail, MapPin, Clock } from 'lucide-react';
+import { business, whatsappLink, whatsappMessages } from '../../config/business';
+import WhatsAppIcon from '../ui/icons/WhatsAppIcon.astro';
+import InstagramIcon from '../ui/icons/InstagramIcon.astro';
+import FacebookIcon from '../ui/icons/FacebookIcon.astro';
+import TikTokIcon from '../ui/icons/TikTokIcon.astro';
+
+const currentYear = new Date().getFullYear();
+const [addrLine1, addrLine2, addrLine3] = business.address.multiline;
+
+const navLinks = [
+  { href: '/',         label: 'Início'   },
+  { href: '/sobre',    label: 'Sobre'    },
+  { href: '/catalogo', label: 'Catálogo' },
+  { href: '/blog',     label: 'Blog'     },
+  { href: '/contato',  label: 'Contato'  },
+];
+
+// Categorias alinhadas 1:1 com src/pages/catalogo.astro
+// Os IDs precisam casar com `data-category` de cada item do catálogo.
+const produtosLinks = [
+  { href: '/catalogo?categoria=poltronas',    label: 'Poltronas'        },
+  { href: '/catalogo?categoria=chaises',      label: 'Chaises'          },
+  { href: '/catalogo?categoria=mesas',        label: 'Mesas & Cadeiras' },
+  { href: '/catalogo?categoria=area_externa', label: 'Área Externa'     },
+  { href: '/catalogo?categoria=banquetas',    label: 'Banquetas'        },
+  { href: '/contato',                         label: 'Sob Medida'       },
+];
+
+const socialPillClass = 'group w-10 h-10 rounded-full bg-anthracite-lighter hover:bg-gold text-text-on-dark hover:text-anthracite flex items-center justify-center transition-colors duration-base border border-white/5 hover:border-gold';
+---
+
+<footer class="bg-anthracite text-text-inverse" role="contentinfo">
+
+  <!-- ══════════════════════════════════════════════════════
+       BANDA CTA
+       ══════════════════════════════════════════════════════ -->
+  <div class="border-b border-anthracite-lighter bg-anthracite-light">
+    <div class="container-magsil py-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="text-[10px] font-medium text-gold tracking-[0.2em] uppercase mb-1.5">
+            Móveis Artesanais · Desde {business.foundingYear}
+          </p>
+          <h3 class="font-[family-name:var(--font-heading)] font-normal text-text-inverse text-xl sm:text-2xl leading-snug">
+            Seu ambiente merece uma peça com história.
+          </h3>
+        </div>
+        <div class="flex items-center gap-3 flex-shrink-0 w-full sm:w-auto">
+          <a
+            href="/contato"
+            class="inline-flex flex-1 sm:flex-none items-center justify-center min-h-[48px] px-6 bg-gold hover:bg-gold-light text-anthracite text-sm font-medium rounded-[var(--radius-md)] transition-colors duration-base"
+          >
+            Solicitar Orçamento
+          </a>
+          <a
+            href={whatsappLink(whatsappMessages.quote)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 min-h-[48px] px-6 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-sm font-medium rounded-[var(--radius-md)] transition-colors duration-base"
+            aria-label="Falar pelo WhatsApp (abre em nova aba)"
+          >
+            <WhatsAppIcon class="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       CORPO — 4 colunas: Marca | Navegação | Produtos | Contato
+       ══════════════════════════════════════════════════════ -->
+  <div class="border-b border-anthracite-lighter">
+    <div class="container-magsil py-8 md:py-12 lg:py-12 px-6 sm:px-8 lg:px-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8 lg:gap-6 text-left">
+
+        <!-- Col 1: Marca + descrição + redes sociais -->
+        <div class="col-span-2 lg:col-span-1 flex flex-col items-start">
+          <a
+            href="/"
+            class="inline-flex items-center gap-3 mb-5 group"
+            aria-label={`${business.name} — ir para o início`}
+          >
+            <span class="text-[2.75rem] font-normal font-[family-name:var(--font-logo)] text-text-inverse group-hover:text-gold transition-colors duration-base pb-1 leading-none">
+              Magsil
+            </span>
+            <span class="text-[13px] font-normal text-gold tracking-eyebrow-wide uppercase mt-1">
+              móveis
+            </span>
+          </a>
+          <p class="text-[15px] text-text-on-dark leading-relaxed mb-6 max-w-[280px] sm:max-w-none">
+            {business.descriptionLong}
+          </p>
+          <div class="flex items-center justify-start gap-3" role="list" aria-label="Redes sociais">
+            <a
+              href={business.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              role="listitem"
+              class={socialPillClass}
+              aria-label="Siga-nos no Instagram (abre em nova aba)"
+            >
+              <InstagramIcon class="w-4 h-4" aria-hidden="true" />
+            </a>
+            <a
+              href={business.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              role="listitem"
+              class={socialPillClass}
+              aria-label="Siga-nos no Facebook (abre em nova aba)"
+            >
+              <FacebookIcon class="w-4 h-4" aria-hidden="true" />
+            </a>
+            <a
+              href={business.social.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              role="listitem"
+              class={socialPillClass}
+              aria-label="Siga-nos no TikTok (abre em nova aba)"
+            >
+              <TikTokIcon class="w-4 h-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Navegação -->
+        <div class="col-span-1 flex flex-col items-start w-full">
+          <h3 class="text-[11px] font-medium text-gold tracking-eyebrow uppercase mb-5 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-gold/30">Navegação</h3>
+          <nav aria-label="Links de navegação do rodapé" class="w-full">
+            <ul class="space-y-0.5 flex flex-col items-start" role="list">
+              {navLinks.map((link) => (
+                <li class="w-full">
+                  <a
+                    href={link.href}
+                    class="group flex items-center justify-start gap-3 py-1.5 min-h-[40px] text-[15px] sm:text-sm text-text-on-dark hover:text-gold transition-colors duration-base border-b border-transparent sm:border-none"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-anthracite-lighter group-hover:bg-gold transition-colors flex-shrink-0" aria-hidden="true"></span>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Col 3: Produtos -->
+        <div class="col-span-1 flex flex-col items-start w-full">
+          <h3 class="text-[11px] font-medium text-gold tracking-eyebrow uppercase mb-5 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-gold/30">Produtos</h3>
+          <ul class="space-y-0.5 flex flex-col items-start w-full" role="list">
+            {produtosLinks.map((link) => (
+              <li class="w-full">
+                <a
+                  href={link.href}
+                  class="group flex items-center justify-start gap-3 py-1.5 min-h-[40px] text-[15px] sm:text-sm text-text-on-dark hover:text-gold transition-colors duration-base border-b border-transparent sm:border-none"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full bg-anthracite-lighter group-hover:bg-gold transition-colors flex-shrink-0" aria-hidden="true"></span>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Col 4: Contato -->
+        <div class="col-span-2 lg:col-span-1 pt-2 sm:pt-0 border-t border-white/5 sm:border-none flex flex-col items-start w-full">
+          <h3 class="text-[11px] font-medium text-gold tracking-eyebrow uppercase mb-5 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1px] after:bg-gold/30">Contato</h3>
+          <ul class="space-y-4" role="list">
+
+            <!-- WhatsApp -->
+            <li class="w-full">
+              <a
+                href={whatsappLink(whatsappMessages.quote)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-row items-start gap-3 sm:gap-4 group min-h-[44px]"
+                aria-label="Enviar mensagem pelo WhatsApp (abre em nova aba)"
+              >
+                <span class="w-10 h-10 rounded-full bg-[#25D366]/10 border border-[#25D366]/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-base" aria-hidden="true">
+                  <WhatsAppIcon class="w-4 h-4 text-[#25D366]" aria-hidden="true" />
+                </span>
+                <span class="flex flex-col min-w-0 text-left">
+                  <span class="text-[10px] text-text-on-dark-muted font-medium uppercase tracking-wider mb-0.5">WhatsApp</span>
+                  <span class="text-[15px] sm:text-sm font-light text-text-inverse group-hover:text-[#25D366] transition-colors duration-base">
+                    {business.phone.formatted}
+                  </span>
+                </span>
+              </a>
+            </li>
+
+            <!-- E-mail -->
+            <li class="w-full">
+              <a
+                href={`mailto:${business.email}`}
+                class="flex flex-row items-start gap-3 sm:gap-4 group min-h-[44px]"
+                aria-label={`Enviar e-mail para ${business.email}`}
+              >
+                <span class="w-10 h-10 rounded-full bg-anthracite-lighter border border-white/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:border-gold transition-all duration-base" aria-hidden="true">
+                  <Mail className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors duration-base" />
+                </span>
+                <span class="flex flex-col min-w-0 text-left">
+                  <span class="text-[10px] text-text-on-dark-muted font-medium uppercase tracking-wider mb-0.5">E-mail</span>
+                  <span class="text-[15px] sm:text-sm font-light text-text-on-dark group-hover:text-text-inverse transition-colors duration-base break-all">
+                    {business.email}
+                  </span>
+                </span>
+              </a>
+            </li>
+
+            <!-- Endereço + horário -->
+            <li class="w-full">
+              <a
+                href={business.address.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-row items-start gap-3 sm:gap-4 group min-h-[44px]"
+                aria-label="Ver endereço no Google Maps (abre em nova aba)"
+              >
+                <span class="w-10 h-10 rounded-full bg-anthracite-lighter border border-white/5 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 group-hover:border-gold transition-all duration-base" aria-hidden="true">
+                  <MapPin className="w-4 h-4 text-gold group-hover:text-gold-light transition-colors duration-base" />
+                </span>
+                <address class="not-italic flex flex-col pt-0 text-left items-start">
+                  <span class="text-[10px] text-text-on-dark-muted font-medium uppercase tracking-wider mb-1 mt-0">Endereço</span>
+                  <span class="text-[15px] sm:text-sm font-light text-text-on-dark group-hover:text-text-inverse leading-relaxed transition-colors duration-base">
+                    {addrLine1}<br class="block pt-1" /> {addrLine2}<br class="block pt-1" /> {addrLine3}
+                  </span>
+                  <span class="whitespace-pre-line text-left text-[11px] text-gold mt-2 flex items-center gap-1.5 py-1 px-0 bg-transparent">
+                    <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                    {business.hours.display}
+                  </span>
+                </address>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       FAIXA DE SELOS INSTITUCIONAIS
+       ══════════════════════════════════════════════════════ -->
+  <div class="border-b border-anthracite-lighter bg-anthracite-light">
+    <div class="container-magsil py-6 sm:py-5 px-6 sm:px-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4">
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-3">
+          <div class="bg-gold/10 p-3 sm:p-0 sm:bg-transparent rounded-full flex-shrink-0">
+            <Award className="w-5 h-5 sm:w-5 sm:h-5 text-gold" aria-hidden="true" />
+          </div>
+          <span class="text-[12px] sm:text-sm text-text-on-dark leading-tight">
+            <span class="block font-medium sm:font-normal text-text-inverse mb-1 sm:mb-0">Artesanal Brasileira</span>
+            Fundada em {business.foundingYear}
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-3">
+          <div class="bg-gold/10 p-3 sm:p-0 sm:bg-transparent rounded-full flex-shrink-0">
+            <ShieldCheck className="w-5 h-5 sm:w-5 sm:h-5 text-gold" aria-hidden="true" />
+          </div>
+          <span class="text-[12px] sm:text-sm text-text-on-dark leading-tight">
+            <span class="block font-medium sm:font-normal text-text-inverse mb-1 sm:mb-0">Fibra UV + Corda</span>
+            Resistente a sol e maresia
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-3">
+          <div class="bg-gold/10 p-3 sm:p-0 sm:bg-transparent rounded-full flex-shrink-0">
+            <Truck className="w-5 h-5 sm:w-5 sm:h-5 text-gold" aria-hidden="true" />
+          </div>
+          <span class="text-[12px] sm:text-sm text-text-on-dark leading-tight">
+            <span class="block font-medium sm:font-normal text-text-inverse mb-1 sm:mb-0">Entrega no Nordeste</span>
+            AL, SE, PE e mais
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-3">
+          <div class="bg-gold/10 p-3 sm:p-0 sm:bg-transparent rounded-full flex-shrink-0">
+            <Palette className="w-5 h-5 sm:w-5 sm:h-5 text-gold" aria-hidden="true" />
+          </div>
+          <span class="text-[12px] sm:text-sm text-text-on-dark leading-tight">
+            <span class="block font-medium sm:font-normal text-text-inverse mb-1 sm:mb-0">100% Personalizável</span>
+            Cores, tramas, medidas
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       BARRA INFERIOR — copyright + links legais
+       ══════════════════════════════════════════════════════ -->
+  <div>
+    <div class="container-magsil py-4 px-6 sm:px-8" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-4 text-[10.5px] sm:text-xs text-text-on-dark-muted text-center sm:text-left">
+
+        <p class="flex flex-col sm:flex-row sm:items-center gap-x-1.5 gap-y-0.5 w-full sm:w-auto">
+          <span>
+            &copy;{currentYear}
+            <a href="/" class="text-text-on-dark hover:text-gold transition-colors duration-base mx-0.5 font-normal">
+              {business.name}
+            </a>
+            · Todos os direitos reservados.
+          </span>
+          <span class="sm:before:content-['·'] sm:before:mr-1.5" aria-label="CNPJ da empresa">
+            CNPJ {business.cnpj}
+          </span>
+        </p>
+
+        <nav aria-label="Links legais" class="w-full sm:w-auto flex justify-center sm:justify-end mt-1 sm:mt-0">
+          <ul class="flex flex-wrap justify-center sm:justify-end items-center gap-x-3 gap-y-1" role="list">
+            <li>
+              <a href="/politica-de-privacidade" class="hover:text-gold transition-colors duration-base py-1.5 inline-flex items-center">
+                Privacidade & LGPD
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-gold/30">•</li>
+            <li>
+              <a href="/termos-de-uso" class="hover:text-gold transition-colors duration-base py-1.5 inline-flex items-center">
+                Termos de Uso
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-gold/30">•</li>
+            <li>
+              <a href="/politica-de-cookies" class="hover:text-gold transition-colors duration-base py-1.5 inline-flex items-center">
+                Cookies
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-gold/30">•</li>
+            <li>
+              <a href="/sitemap.xml" class="hover:text-gold transition-colors duration-base py-1.5 inline-flex items-center">
+                Sitemap
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+
+</footer>

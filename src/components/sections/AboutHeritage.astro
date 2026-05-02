@@ -1,0 +1,46 @@
+---
+import { ArrowRight } from 'lucide-react';
+---
+<section id="atelie" class="section-padding bg-offwhite">
+  <div class="container-magsil">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      
+      <!-- Text Content -->
+      <div class="order-2 lg:order-1" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em] mb-4 block">
+          O Ateliê Magsil
+        </span>
+        <h2 class="text-3xl md:text-4xl font-normal mb-6 text-text-primary leading-tight text-balance">
+          Tradição Artesanal em Cada Trama
+        </h2>
+        <p class="text-text-secondary text-base leading-relaxed mb-6">
+          Fundada em 2017 no coração de Alagoas, a Magsil Móveis nasceu da paixão por unir a resistência bruta dos metais à leveza e sofisticação das fibras tramadas à mão. 
+        </p>
+        <p class="text-text-secondary text-base leading-relaxed mb-8">
+          Nossos artesãos dedicam horas de cuidado meticuloso em cada peça, transformando corda náutica e fibra sintética premium em obras de arte funcionais. É esse processo artesanal que garante não apenas móveis com design exclusivo, mas verdadeiros tesouros projetados para durar gerações, resistindo ao tempo e às intempéries.
+        </p>
+        <a href="/sobre" class="inline-flex items-center gap-2 text-sm font-normal text-gold hover:gap-3 transition-all duration-base">
+          Conheça nossa história completa
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </a>
+      </div>
+
+      <!-- Image Content -->
+      <div class="order-1 lg:order-2 relative" data-animate data-animate-delay="1">
+        <div class="aspect-[4/3] md:aspect-[4/5] rounded-[var(--radius-lg)] overflow-hidden border border-border-light shadow-xl relative z-10">
+          <img 
+            src="/images/heritage-artisan.png" 
+            alt="Mãos de um artesão trançando móvel em fibra sintética" 
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        
+        <!-- Decorative frame -->
+        <div class="absolute -top-6 -right-6 w-32 h-32 border-t-2 border-r-2 border-gold/40 rounded-tr-[var(--radius-lg)] z-0 hidden md:block"></div>
+        <div class="absolute -bottom-6 -left-6 w-32 h-32 border-b-2 border-l-2 border-gold/40 rounded-bl-[var(--radius-lg)] z-0 hidden md:block"></div>
+      </div>
+
+    </div>
+  </div>
+</section>

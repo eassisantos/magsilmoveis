@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+import { type LucideIcon } from 'lucide-react';
+
+interface Props {
+  label: string;
+  value: string | number;
+  description: string;
+  icon: LucideIcon;
+  iconColor: string;
+  iconBg: string;
+  chartColor: string;
+}
+
+const { label, value, description, icon: Icon, iconColor, iconBg, chartColor } = Astro.props;
+---
+
+<div class="bg-white border border-admin-border rounded-xl p-5">
+  <div class="flex items-start justify-between mb-3">
+    <p class="text-[11px] font-semibold uppercase tracking-widest text-admin-text-muted">{label}</p>
+    <div class={`p-2 rounded-lg ${iconBg}`}><Icon className={`w-4 h-4 ${iconColor}`} /></div>
+  </div>
+  <p class={`text-3xl font-bold leading-none mb-1 ${iconColor}`}>{value}</p>
+  <p class="text-xs text-admin-text-muted">{description}</p>
+  <div class="mt-3 h-5 opacity-25">
+    <svg viewBox="0 0 100 20" class="w-full h-full" preserveAspectRatio="none">
+      <polyline points="0,10 25,10 50,10 75,10 100,10" fill="none" stroke={chartColor} stroke-width="1.5"/>
+    </svg>
+  </div>
+</div>

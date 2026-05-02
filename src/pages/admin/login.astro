@@ -1,0 +1,63 @@
+---
+export const prerender = false;
+
+// If already authenticated, redirect to dashboard
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+if (supabaseUrl) {
+  try {
+    const { createSupabaseServerClient } = await import('@lib/supabase');
+    const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) return Astro.redirect('/admin');
+  } catch {}
+}
+
+const error = Astro.url.searchParams.get('error');
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Login | Admin — Magsil Móveis</title>
+    <style>
+      @import 'tailwindcss';
+      body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8 flex flex-col items-center justify-center">
+        <div class="font-bold text-4xl tracking-tighter text-slate-900 mb-1">Magsil</div>
+        <span class="text-xs uppercase tracking-widest text-slate-500">Admin</span>
+        <p class="mt-4 text-sm text-slate-500">Acesse o painel administrativo</p>
+      </div>
+
+      {error && (
+        <div class="mb-6 p-4 rounded-lg text-sm text-center bg-red-50 border border-red-200 text-red-600">
+          Credenciais inválidas. Tente novamente.
+        </div>
+      )}
+
+      <form action="/api/auth/login" method="POST" class="p-8 rounded-xl bg-white border border-gray-200 shadow-sm">
+        <div class="mb-6">
+          <label for="email" class="block text-sm font-medium mb-2 text-gray-700">E-mail</label>
+          <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg text-base outline-none transition-all bg-gray-50 border border-gray-200 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 text-gray-900" placeholder="admin@magsilmoveis.com.br" />
+        </div>
+        <div class="mb-8">
+          <label for="password" class="block text-sm font-medium mb-2 text-gray-700">Senha</label>
+          <input type="password" id="password" name="password" required class="w-full px-4 py-3 rounded-lg text-base outline-none transition-all bg-gray-50 border border-gray-200 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 text-gray-900" placeholder="••••••••" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-lg text-base font-medium transition-colors bg-slate-900 text-white hover:bg-slate-800" id="login-submit">
+          Entrar
+        </button>
+      </form>
+
+      <div class="mt-6 text-center">
+        <a href="/" class="text-xs hover:underline text-slate-500">← Voltar ao site</a>
+      </div>
+    </div>
+  </body>
+</html>

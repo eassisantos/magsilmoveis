@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categories = [
+  { id: 'todos', label: 'Todos' },
+  { id: 'poltronas', label: 'Poltronas' },
+  { id: 'chaises', label: 'Chaises' },
+  { id: 'mesas', label: 'Mesas & Cadeiras' },
+  { id: 'area_externa', label: 'Área Externa' },
+  { id: 'banquetas', label: 'Banquetas' },
+];
+
+const products = [
+  { slug: 'poltrona-vega', name: 'Poltrona Vega', category: 'poltronas', description: 'Estrutura metálica com corda náutica trançada à mão.', image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'chaise-aurora', name: 'Chaise Aurora', category: 'chaises', description: 'Fibra sintética premium para varandas e leitura.', image: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'mesa-horizonte', name: 'Mesa Horizonte', category: 'mesas', description: 'Tampo em mármore e base metálica dourada.', image: 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'cadeira-brise', name: 'Cadeira Brise', category: 'mesas', description: 'Encosto em fibra sintética e estrutura em alumínio.', image: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'conjunto-solarium', name: 'Conjunto Solarium', category: 'area_externa', description: 'Mesa e 4 cadeiras em fibra sintética.', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'espreguicadeira-costa', name: 'Espreguiçadeira Costa', category: 'area_externa', description: 'Regulagem de inclinação, fibra resistente a UV.', image: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'banqueta-atelier', name: 'Banqueta Atelier', category: 'banquetas', description: 'Banqueta alta com corda náutica artesanal.', image: 'https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'poltrona-ninho', name: 'Poltrona Ninho', category: 'poltronas', description: 'Poltrona suspensa com cesto em fibra sintética.', image: 'https://images.unsplash.com/photo-1519974719765-e6559eac2575?auto=format&fit=crop&w=800&q=80' },
+  { slug: 'mesa-bistro-essence', name: 'Mesa Bistro Essence', category: 'mesas', description: 'Tampo vidro temperado e base ferro forjado.', image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80' },
+];
+---
+
+<BaseLayout
+  title="Catálogo de Móveis em Fibra Sintética e Corda Náutica"
+  description="Conheça o catálogo completo da Magsil Móveis: poltronas, chaises, conjuntos de jantar e móveis para área externa. Personalizados em cores e medidas. Arapiraca/AL."
+>
+  <section class="section-padding-sm bg-surface">
+    <div class="container-magsil">
+      <nav aria-label="Localização" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li class="text-text-primary font-medium" aria-current="page">Catálogo</li>
+        </ol>
+      </nav>
+      <div class="text-center" data-animate>
+      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Catálogo</span>
+      <h1 class="mt-4 mb-4">Nossas Peças</h1>
+      <p class="text-text-secondary max-w-2xl mx-auto">Peças exclusivas para ambientes de alto padrão. Personalizáveis em cores, texturas e medidas.</p>
+      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-offwhite">
+    <div class="container-magsil">
+      <div class="flex flex-wrap justify-center gap-3 mb-12" data-animate>
+        {categories.map((cat) => (
+          <button type="button" class="catalog-filter min-h-[48px] px-6 text-sm font-normal rounded-[var(--radius-full)] border border-border-light bg-surface text-text-secondary hover:border-gold hover:text-gold transition-all duration-base data-[active]:bg-anthracite data-[active]:text-text-inverse data-[active]:border-anthracite" data-category={cat.id} data-active={cat.id === 'todos' ? '' : undefined}>
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="catalog-grid">
+        {products.map((p, i) => (
+          <div class="catalog-item group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift flex flex-col" data-category={p.category} data-animate data-animate-delay={String((i % 3) + 1)}>
+            <a href={`/produtos/${p.slug}`} class="aspect-[4/3] bg-border-light overflow-hidden relative block image-zoom">
+              <img src={p.image} alt={p.name} class="w-full h-full object-cover" loading="lazy" />
+              <div class="absolute inset-0 bg-anthracite/60 opacity-0 group-hover:opacity-100 transition-opacity duration-base flex items-center justify-center">
+                <span class="inline-flex items-center justify-center min-h-[48px] px-6 bg-gold text-anthracite text-sm font-normal rounded-[var(--radius-md)]">Ver Detalhes</span>
+              </div>
+            </a>
+            <div class="p-6 flex-1 flex flex-col">
+              <span class="text-xs font-normal uppercase tracking-widest text-gold">{categories.find(c => c.id === p.category)?.label}</span>
+              <a href={`/produtos/${p.slug}`} class="hover:text-gold transition-colors"><h3 class="text-lg mt-2 mb-2">{p.name}</h3></a>
+              <p class="text-text-secondary text-sm leading-relaxed mb-4 flex-1">{p.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding bg-anthracite text-text-inverse">
+    <div class="container-magsil text-center">
+      <div class="max-w-xl mx-auto" data-animate>
+        <h2 class="text-offwhite mb-6">Não Encontrou o que Procura?</h2>
+        <p class="text-text-muted mb-8">Fabricamos peças sob medida. Transforme sua ideia em realidade.</p>
+        <a href="/contato" class="inline-flex items-center justify-center min-h-[52px] px-8 bg-gold text-anthracite text-base font-normal rounded-[var(--radius-md)] hover:bg-gold-light transition-all duration-base shadow-gold">Fale com um Especialista</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="../scripts/catalog.ts"></script>
+</BaseLayout>

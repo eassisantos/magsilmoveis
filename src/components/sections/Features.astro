@@ -1,0 +1,61 @@
+---
+import { Factory, PenTool, Sun, Shield, ShieldCheck, Leaf } from 'lucide-react';
+
+const features = [
+  {
+    title: 'Trama Artesanal',
+    description: 'Trabalho manual minucioso que confere exclusividade e perfeição a cada milímetro do acabamento.',
+    Icon: Factory,
+  },
+  {
+    title: 'Design Autoral',
+    description: 'Linhas contemporâneas desenhadas para valorizar a arquitetura e trazer elegância ao ambiente.',
+    Icon: PenTool,
+  },
+  {
+    title: 'Resistência Climática',
+    description: 'Fibras sintéticas e cordas náuticas com máxima proteção UV, resistentes ao sol e à chuva.',
+    Icon: Sun,
+  },
+  {
+    title: 'Estrutura Antiferrugem',
+    description: 'Armações soldadas em alumínio naval, garantindo leveza e imunidade contra oxidação e maresia.',
+    Icon: Shield,
+  },
+  {
+    title: 'Garantia Estendida',
+    description: 'Controle de qualidade rigoroso que nos permite oferecer garantia de fábrica superior ao mercado.',
+    Icon: ShieldCheck,
+  },
+  {
+    title: 'Sustentabilidade',
+    description: 'Utilização de fibras recicláveis e processos que minimizam o desperdício de material na fábrica.',
+    Icon: Leaf,
+  },
+];
+---
+<section id="diferenciais" class="section-padding bg-offwhite">
+  <div class="container-magsil">
+    <div class="text-center mb-16" data-animate>
+      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Nosso DNA</span>
+      <h2 class="mt-4 text-balance">Compromisso com Excelência em Cada Etapa</h2>
+      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {features.map((feat, i) => (
+        <div
+          class="bg-surface rounded-[var(--radius-lg)] p-8 border border-border-light hover-lift"
+          data-animate
+          data-animate-delay={String((i % 3) + 1)}
+        >
+          <div class="w-12 h-12 bg-gold/10 rounded-[var(--radius-md)] flex items-center justify-center mb-6">
+            <feat.Icon className="w-6 h-6 text-gold" aria-hidden="true" />
+          </div>
+          <h3 class="text-lg font-normal mb-3">{feat.title}</h3>
+          <p class="text-text-secondary text-sm leading-relaxed">{feat.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

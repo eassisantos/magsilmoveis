@@ -1,0 +1,124 @@
+---
+---
+<section id="inicio" class="relative min-h-[60vh] lg:min-h-[70vh] flex items-center bg-anthracite overflow-hidden">
+  <!-- Background Slider -->
+  <div id="hero-slider" class="absolute inset-0 w-full h-full opacity-60">
+    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-100" style="background-image: url('/images/products/poltrona-vega.png')"></div>
+    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/products/mesa-essencia.png')"></div>
+    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/products/chaise-aurora.png')"></div>
+    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/collections/sofa.png')"></div>
+  </div>
+  
+  <!-- Texture overlay (simulating weave/trama) -->
+  <div class="hero-pattern absolute inset-0 opacity-10"></div>
+
+  <!-- Background gradient overlay for deeper contrast -->
+  <div class="absolute inset-0 bg-gradient-to-r from-anthracite via-anthracite/80 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-anthracite via-transparent to-anthracite/20"></div>
+
+  <!-- Decorative gold accent -->
+  <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/5 to-transparent pointer-events-none"></div>
+
+  <div class="container-magsil relative z-10 pt-28 pb-10 md:pt-32 md:pb-12 flex flex-col items-center text-center lg:items-start lg:text-left">
+    <div class="max-w-4xl flex flex-col items-center lg:items-start w-full">
+      <div class="inline-flex items-center justify-center gap-3 lg:gap-4 text-gold text-[10px] md:text-xs font-semibold uppercase tracking-[0.25em] mb-4 md:mb-6" data-animate>
+        <span class="hidden md:block w-8 h-[1px] bg-gold/60" aria-hidden="true"></span>
+        <span>Design Metálico Artesanal</span>
+        <span class="hidden lg:block w-8 h-[1px] bg-transparent" aria-hidden="true"></span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-[4.25rem] leading-[1.15] sm:leading-[1.1] lg:leading-[1.05] text-text-inverse mb-6 md:mb-8 font-light max-w-[320px] sm:max-w-2xl mx-auto lg:mx-0 tracking-tight" data-animate data-animate-delay="1">
+        Criação Autoral de Móveis de
+        <span class="text-gradient-gold block font-normal mt-1 md:mt-3">Fibra Sintética</span>
+        <span class="block text-2xl sm:text-4xl lg:text-[2.75rem] font-light text-offwhite/80 mt-2 md:mt-3">e Corda Náutica</span>
+      </h1>
+      <p class="text-base md:text-lg text-text-muted max-w-md sm:max-w-xl lg:max-w-2xl mb-10 md:mb-12 leading-[1.7] px-2 md:px-0" data-animate data-animate-delay="2">
+        A perfeita união entre o requinte, a durabilidade extrema e o design atemporal. Estruturas premium em alumínio naval idealizadas para áreas de alto padrão.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full px-6 md:px-0 sm:w-auto" data-animate data-animate-delay="3">
+        <a
+          href="/contato"
+          class="inline-flex items-center justify-center w-full sm:w-auto h-14 md:min-h-[56px] px-8 md:px-10 bg-gold border border-gold text-anthracite shadow-[0_4px_20px_rgba(202,160,82,0.2)] text-[15px] md:text-base font-medium tracking-wide rounded-[var(--radius-md)] hover:bg-transparent hover:text-gold transition-all duration-base"
+          id="hero-cta-primary"
+        >
+          Solicitar Orçamento
+        </a>
+        <a
+          href="/catalogo"
+          class="inline-flex items-center justify-center w-full sm:w-auto h-14 md:min-h-[56px] px-8 md:px-10 border border-offwhite/20 text-text-inverse text-[15px] md:text-base font-normal tracking-wide rounded-[var(--radius-md)] hover:border-text-inverse hover:bg-white/5 transition-all duration-base"
+          id="hero-cta-secondary"
+        >
+          Explorar Coleções
+        </a>
+      </div>
+
+      <!-- Social proof stats -->
+      <div class="grid grid-cols-3 lg:flex lg:flex-row gap-4 sm:gap-8 md:gap-16 w-full mt-10 md:mt-12 pt-6 border-t border-offwhite/10" data-animate data-animate-delay="4">
+        <div class="flex flex-col gap-1.5 items-center lg:items-start">
+          <span class="text-2xl md:text-3xl font-light text-offwhite">500<span class="text-gold">+</span></span>
+          <span class="text-[11px] md:text-xs text-offwhite/70 uppercase tracking-[0.15em] text-center lg:text-left">Projetos entregues</span>
+        </div>
+        <div class="flex flex-col gap-1.5 items-center lg:items-start border-x border-offwhite/10 lg:border-x-0 px-2 lg:px-0">
+          <span class="text-2xl md:text-3xl font-light text-offwhite">{new Date().getFullYear() - 2020}<span class="text-gold">+</span></span>
+          <span class="text-[11px] md:text-xs text-offwhite/70 uppercase tracking-[0.15em] text-center lg:text-left">Anos de experiência</span>
+        </div>
+        <div class="flex flex-col gap-1.5 items-center lg:items-start">
+          <span class="text-2xl md:text-3xl font-light text-gradient-gold">100<span class="text-gold">%</span></span>
+          <span class="text-[11px] md:text-xs text-offwhite/70 uppercase tracking-[0.15em] text-center lg:text-left">Satisfação garantida</span>
+        </div>
+      </div>
+    </div>
+    
+
+  </div>
+</section>
+
+<style>
+  .hero-pattern {
+    /* Texture pattern (Weave / Trama) */
+    background-image: 
+      linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111),
+      linear-gradient(45deg, #111 25%, transparent 25%, transparent 75%, #111 75%, #111);
+    background-position: 0 0, 2px 2px;
+    background-size: 4px 4px;
+    /* Subtle overlay effect */
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  @keyframes elegant-scroll {
+    0% { transform: translateY(-150%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(250%); opacity: 0; }
+  }
+  .animate-elegant-scroll {
+    animation: elegant-scroll 2.5s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+</style>
+
+<script>
+  function initHeroSlider() {
+    const slides = document.querySelectorAll<HTMLElement>('#hero-slider .hero-slide');
+    if (!slides.length) return;
+    
+    let current = 0;
+    setInterval(() => {
+      // Fade out old slide
+      slides[current].classList.remove('opacity-100');
+      slides[current].classList.add('opacity-0');
+      
+      current = (current + 1) % slides.length;
+      
+      // Fade in new slide
+      slides[current].classList.remove('opacity-0');
+      slides[current].classList.add('opacity-100');
+    }, 6000); // Transitions every 6 seconds to match the 6s transition duration
+  }
+
+  // Support for Astro view transitions
+  document.addEventListener('astro:page-load', initHeroSlider);
+  
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initHeroSlider();
+  } else {
+    document.addEventListener('DOMContentLoaded', initHeroSlider);
+  }
+</script>

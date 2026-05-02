@@ -1,0 +1,76 @@
+---
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'Móveis metálicos artesanais com acabamento premium em fibra sintética e corda náutica. Design autoral desde 2017.',
+  ogImage = '/images/og-default.jpg',
+  canonical,
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magsilmoveis.com.br';
+const pageTitle = title === 'Home'
+  ? 'Magsil Móveis | Móveis Artesanais em Fibra Sintética e Corda Náutica'
+  : title.includes('Magsil')
+    ? title
+    : `${title} | Magsil Móveis`;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString();
+---
+
+<!-- SEO -->
+<title>{pageTitle}</title>
+<ClientRouter />
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(ogImage, siteUrl).toString()} />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:site_name" content="Magsil Móveis" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(ogImage, siteUrl).toString()} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#1a1a2e" />
+
+<!-- JSON-LD: Organization -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Magsil Móveis',
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo.svg`,
+  description: 'Móveis metálicos artesanais com acabamento premium em fibra sintética e corda náutica.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Rua São Gabriel, nº 32, Canafístula',
+    addressLocality: 'Arapiraca',
+    addressRegion: 'AL',
+    addressCountry: 'BR',
+  },
+  foundingDate: '2017',
+  sameAs: [
+    'https://www.instagram.com/magsilmoveis/',
+    'https://www.facebook.com/magsilmoveis/',
+  ],
+})} />

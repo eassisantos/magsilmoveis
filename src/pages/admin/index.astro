@@ -1,0 +1,159 @@
+---
+export const prerender = false;
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import KpiCard from '../../components/admin/KpiCard.astro';
+import Badge from '../../components/admin/Badge.astro';
+import { Users, UserPlus, Package, FileText, MessageSquare, TrendingUp, ArrowRight } from 'lucide-react';
+
+let totalLeads = 0;
+let newLeads = 0;
+let convertedLeads = 0;
+let totalProducts = 0;
+let totalPosts = 0;
+let totalTestimonials = 0;
+let recentLeads: Array<{name: string; email: string; status: string; created_at: string}> = [];
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+if (supabaseUrl) {
+  try {
+    const { createSupabaseAdmin } = await import('../../lib/supabase');
+    const supabase = createSupabaseAdmin();
+    const [l, nl, cl, prod, posts, dep, leads] = await Promise.all([
+      supabase.from('leads').select('*', { count: 'exact', head: true }),
+      supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'novo'),
+      supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'convertido'),
+      supabase.from('products').select('*', { count: 'exact', head: true }).eq('active', true),
+      supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+      supabase.from('testimonials').select('*', { count: 'exact', head: true }).eq('active', true),
+      supabase.from('leads').select('name, email, status, created_at').order('created_at', { ascending: false }).limit(5),
+    ]);
+    totalLeads = l.count || 0;
+    newLeads = nl.count || 0;
+    convertedLeads = cl.count || 0;
+    totalProducts = prod.count || 0;
+    totalPosts = posts.count || 0;
+    totalTestimonials = dep.count || 0;
+    recentLeads = leads.data || [];
+  } catch (e) { console.error('Dashboard error:', e); }
+}
+
+const statusLabels: Record<string, { text: string; variant: string }> = {
+  novo: { text: 'Novo', variant: 'success' },
+  em_contato: { text: 'Em Contato', variant: 'info' },
+  convertido: { text: 'Convertido', variant: 'purple' },
+  arquivado: { text: 'Arquivado', variant: 'neutral' },
+};
+
+function formatDate(d: string): string {
+  return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
+---
+
+<AdminLayout title="Dashboard">
+
+  <!-- Period Filter Tabs -->
+  <div class="flex items-center gap-2 mb-6 flex-wrap">
+    {['7 dias', '30 dias', '90 dias', 'Todo período', 'Personalizado'].map((tab) => (
+      <button
+        class={`px-4 py-2 text-sm rounded-full border transition-colors ${tab === 'Todo período' ? 'bg-admin-accent text-white border-admin-accent' : 'bg-white text-admin-text-muted border-admin-border hover:text-admin-text hover:border-admin-text-muted'}`}
+      >
+        {tab}
+      </button>
+    ))}
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <KpiCard label="Total de Leads" value={totalLeads} description="Todos os contatos recebidos" icon={Users} iconColor="text-slate-600" iconBg="bg-slate-100" chartColor="#7A6D65" />
+    <KpiCard label="Leads Novos" value={newLeads} description="Aguardando primeiro contato" icon={UserPlus} iconColor="text-amber-700" iconBg="bg-amber-100" chartColor="#d97706" />
+    <KpiCard label="Leads Convertidos" value={convertedLeads} description="Projetos finalizados" icon={TrendingUp} iconColor="text-emerald-700" iconBg="bg-emerald-100" chartColor="#16a34a" />
+    <KpiCard label="Produtos Ativos" value={totalProducts} description="Itens visíveis no catálogo" icon={Package} iconColor="text-orange-700" iconBg="bg-orange-100" chartColor="#ea580c" />
+    <KpiCard label="Posts Publicados" value={totalPosts} description="Artigos ativos no blog" icon={FileText} iconColor="text-purple-700" iconBg="bg-purple-100" chartColor="#7c3aed" />
+    <KpiCard label="Depoimentos" value={totalTestimonials} description="Aprovados e visíveis no site" icon={MessageSquare} iconColor="text-rose-700" iconBg="bg-rose-100" chartColor="#e11d48" />
+  </div>
+
+  <!-- Chart: Leads por Semana (full width) -->
+  <div class="bg-white border border-admin-border rounded-xl p-6 mb-4">
+    <h3 class="text-[11px] font-semibold uppercase tracking-widest text-admin-text-muted mb-5">Leads por Semana</h3>
+    <div class="flex flex-col items-center justify-center h-36 gap-3">
+      <svg class="w-8 h-8 text-admin-border" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+      </svg>
+      <p class="text-sm text-admin-text-muted">Sem dados suficientes para exibir o gráfico.</p>
+    </div>
+  </div>
+
+  <!-- Charts: Funil + Origem (half + half) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <div class="bg-white border border-admin-border rounded-xl p-6">
+      <h3 class="text-[11px] font-semibold uppercase tracking-widest text-admin-text-muted mb-5">Funil de Pedidos</h3>
+      <div class="flex flex-col items-center justify-center h-36 gap-3">
+        <svg class="w-8 h-8 text-admin-border" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 4h18l-7 9v6l-4-2v-4L3 4z"/>
+        </svg>
+        <p class="text-sm text-admin-text-muted text-center">Nenhum dado no funil para o período.</p>
+      </div>
+    </div>
+    <div class="bg-white border border-admin-border rounded-xl p-6">
+      <h3 class="text-[11px] font-semibold uppercase tracking-widest text-admin-text-muted mb-5">Leads por Origem</h3>
+      <div class="flex flex-col items-center justify-center h-36 gap-3">
+        <svg class="w-8 h-8 text-admin-border" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <p class="text-sm text-admin-text-muted text-center">Nenhuma origem rastreada para o período.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Leads -->
+  {recentLeads.length > 0 && (
+    <div class="bg-white border border-admin-border rounded-xl overflow-hidden mb-8">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-admin-border">
+        <h2 class="text-[11px] font-semibold uppercase tracking-widest text-admin-text-muted">Últimos Leads</h2>
+        <a href="/admin/leads" class="inline-flex items-center gap-1 text-xs text-admin-text-muted hover:text-admin-text transition-colors">
+          Ver todos <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead>
+            <tr class="bg-admin-surface-hover text-[11px] font-semibold uppercase tracking-wider text-admin-text-muted border-b border-admin-border">
+              <th class="py-3 px-6">Nome</th>
+              <th class="py-3 px-6">E-mail</th>
+              <th class="py-3 px-6">Status</th>
+              <th class="py-3 px-6 text-right">Data</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-admin-border">
+            {recentLeads.map((lead) => {
+              const s = statusLabels[lead.status] || { text: lead.status, variant: 'neutral' };
+              return (
+                <tr class="hover:bg-admin-surface-hover transition-colors">
+                  <td class="py-3 px-6 font-medium text-admin-text">{lead.name}</td>
+                  <td class="py-3 px-6 text-admin-text-muted">{lead.email}</td>
+                  <td class="py-3 px-6">
+                    <Badge text={s.text} variant={s.variant as any} dot={true} />
+                  </td>
+                  <td class="py-3 px-6 text-right text-admin-text-muted whitespace-nowrap">{formatDate(lead.created_at)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )}
+
+  <!-- LGPD Footer -->
+  <div class="flex items-center gap-3 p-4 bg-white border border-admin-border rounded-xl">
+    <div class="w-7 h-7 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+      <svg class="w-3.5 h-3.5 text-amber-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <p class="text-xs text-admin-text-muted">
+      <strong class="text-admin-text font-semibold">LGPD</strong> — Dados sensíveis exibidos apenas neste painel administrativo.
+    </p>
+  </div>
+
+</AdminLayout>

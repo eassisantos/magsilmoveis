@@ -1,0 +1,121 @@
+---
+import { ArrowRight, ShieldCheck, Sun, Droplets } from 'lucide-react';
+
+const featuredProducts = [
+  {
+    name: 'Poltrona Vega',
+    category: 'Corda Náutica',
+    image: '/images/products/poltrona-vega.png',
+    materials: 'Alumínio Naval T6 • Pintura Eletrostática',
+    specs: [
+      { icon: Sun, text: 'Proteção UV Máxima' },
+      { icon: ShieldCheck, text: 'Garantia de 5 anos' },
+      { icon: Droplets, text: 'Resistente à maresia' }
+    ],
+    startingPrice: 'A partir de R$ 1.890',
+    link: '/catalogo?filter=poltronas'
+  },
+  {
+    name: 'Chaise Aurora',
+    category: 'Fibra Sintética',
+    image: '/images/products/chaise-aurora.png',
+    materials: 'Trama Dupla Premium • Alumínio Naval',
+    specs: [
+      { icon: Droplets, text: 'Estofado Aquablock' },
+      { icon: Sun, text: 'Fibra c/ filtro UV' },
+      { icon: ShieldCheck, text: 'Garantia de 5 anos' }
+    ],
+    startingPrice: 'A partir de R$ 2.690',
+    link: '/catalogo?filter=chaises'
+  },
+  {
+    name: 'Conjunto Jantar Essência',
+    category: 'Área Externa',
+    image: '/images/products/mesa-essencia.png',
+    materials: 'Tampo em Vidro Temperado 8mm',
+    specs: [
+      { icon: ShieldCheck, text: 'Estrutura ultra-reforçada' },
+      { icon: Droplets, text: 'Fácil higienização' },
+      { icon: Sun, text: 'Uso in/out' }
+    ],
+    startingPrice: 'A partir de R$ 4.990',
+    link: '/catalogo?filter=mesas'
+  }
+];
+---
+<section id="destaques" class="section-padding bg-surface">
+  <div class="container-magsil">
+    
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 md:mb-16 gap-6" data-animate>
+      <div>
+        <span class="inline-flex items-center gap-3 text-gold text-xs font-normal uppercase tracking-[0.25em] mb-4">
+          <span class="w-8 h-[1px] bg-gold" aria-hidden="true"></span>
+          Assinatura Magsil
+        </span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-light text-text-primary text-balance max-w-xl">
+          Peças de Destaque
+        </h2>
+      </div>
+      <a href="/catalogo" class="inline-flex items-center justify-center w-full md:w-auto min-h-[48px] px-8 bg-transparent border border-border-light text-text-primary text-sm font-normal tracking-wide rounded-[var(--radius-md)] hover:border-gold hover:text-gold transition-all duration-base shadow-sm">
+        Ver Coleção Completa
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredProducts.map((product, i) => (
+        <div 
+          class="group relative z-0 bg-offwhite rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1 transition-all duration-500 flex flex-col"
+          data-animate 
+          data-animate-delay={String((i % 3) + 1)}
+        >
+          <!-- Image Container -->
+          <div class="aspect-[4/3] bg-anthracite-lighter overflow-hidden relative">
+            <div class="absolute inset-0 flex items-center justify-center p-6 text-center pointer-events-none" aria-hidden="true">
+              <span class="text-offwhite/30 text-sm font-normal tracking-wide">{product.name}</span>
+            </div>
+            <img 
+              src={product.image} 
+              alt={product.name} 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out relative z-10"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 z-20 bg-anthracite/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+          </div>
+          
+          <!-- Content -->
+          <div class="p-8 flex flex-col flex-grow relative bg-offwhite z-30">
+            <div class="mb-6">
+              <span class="text-[0.65rem] font-normal uppercase tracking-[0.25em] text-gold block mb-3">
+                {product.category}
+              </span>
+              <h3 class="text-2xl font-light text-text-primary mb-2">
+                {product.name}
+              </h3>
+              <p class="text-sm text-text-secondary leading-relaxed">
+                {product.materials}
+              </p>
+            </div>
+            
+            <!-- Specs List -->
+            <ul class="flex flex-col gap-3 py-5 border-y border-border-light/50 mb-6 flex-grow">
+              {product.specs.map(spec => (
+                <li class="flex items-center gap-3 text-sm text-text-secondary">
+                  <spec.icon className="w-4 h-4 text-gold/70" aria-hidden="true" strokeWidth={1.5} />
+                  <span class="font-normal tracking-wide">{spec.text}</span>
+                </li>
+              ))}
+            </ul>
+            
+            <div class="mt-auto">
+              <a href={product.link} class="inline-flex items-center justify-between w-full p-4 bg-surface/50 rounded-[var(--radius-sm)] text-sm font-normal text-text-primary group-hover:bg-gold/5 group-hover:text-gold transition-colors duration-base">
+                Detalhes da Peça
+                <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-base" aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

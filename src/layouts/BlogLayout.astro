@@ -1,0 +1,167 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate?: Date;
+  updatedDate?: Date;
+  coverImage?: string;
+  author?: string;
+  category?: string;
+  tags?: string[];
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  coverImage,
+  author = 'Magsil Móveis',
+  category,
+  tags = [],
+} = Astro.props;
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magsilmoveis.com.br';
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+---
+
+<BaseLayout title={title} description={description} ogImage={coverImage}>
+  <!-- JSON-LD: Article -->
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: title,
+      description: description,
+      image: coverImage ? new URL(coverImage, siteUrl).toString() : undefined,
+      author: {
+        '@type': 'Person',
+        name: author,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Magsil Móveis',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${siteUrl}/images/logo.svg`,
+        },
+      },
+      datePublished: pubDate?.toISOString(),
+      dateModified: updatedDate?.toISOString() || pubDate?.toISOString(),
+    })} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+        { '@type': 'ListItem', position: 3, name: title },
+      ],
+    })} />
+  </Fragment>
+
+  <article class="section-padding">
+    <div class="container-narrow">
+      <!-- Breadcrumbs -->
+      <nav aria-label="Localização" class="mb-8">
+        <ol class="flex flex-wrap items-center gap-1.5 text-sm text-text-muted" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
+          <li aria-hidden="true" class="text-border">›</li>
+          <li><a href="/blog" class="hover:text-gold transition-colors duration-base">Blog</a></li>
+          <li aria-hidden="true" class="text-border">›</li>
+          <li class="text-text-secondary font-normal truncate max-w-[240px]" aria-current="page">{title}</li>
+        </ol>
+      </nav>
+
+      <!-- Article Header -->
+      <header class="mb-12">
+        {category && (
+          <span class="inline-block text-xs font-normal uppercase tracking-widest text-gold mb-4">
+            {category}
+          </span>
+        )}
+        <h1 class="text-balance mb-6">{title}</h1>
+        <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
+          <span>Por <strong class="text-text-primary">{author}</strong></span>
+          {pubDate && (
+            <time datetime={pubDate.toISOString()} class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {formatDate(pubDate)}
+            </time>
+          )}
+          {updatedDate && (
+            <time datetime={updatedDate.toISOString()} class="text-text-muted">
+              (Atualizado em {formatDate(updatedDate)})
+            </time>
+          )}
+        </div>
+      </header>
+
+      <!-- Cover Image -->
+      {coverImage && (
+        <div class="rounded-[var(--radius-lg)] overflow-hidden mb-12 shadow-md">
+          <img
+            src={coverImage}
+            alt={title}
+            class="w-full h-auto aspect-[16/9] object-cover"
+            loading="eager"
+          />
+        </div>
+      )}
+
+      <!-- Article Body -->
+      <div class="prose prose-lg max-w-none
+        prose-headings:font-[family-name:var(--font-heading)]
+        prose-headings:text-anthracite
+        prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
+        prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
+        prose-p:text-text-primary prose-p:leading-relaxed
+        prose-a:text-gold prose-a:font-normal prose-a:no-underline hover:prose-a:underline
+        prose-strong:text-anthracite
+        prose-img:rounded-[var(--radius-lg)] prose-img:shadow-md
+        prose-blockquote:border-gold prose-blockquote:bg-surface prose-blockquote:rounded-r-[var(--radius-md)] prose-blockquote:py-1
+        prose-code:bg-surface prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-[var(--radius-sm)]
+        prose-pre:bg-anthracite prose-pre:rounded-[var(--radius-md)]
+      ">
+        <slot />
+      </div>
+
+      <!-- Tags -->
+      {tags.length > 0 && (
+        <div class="mt-12 pt-8 border-t border-border">
+          <div class="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span class="inline-flex items-center px-3 py-1 text-xs font-normal bg-surface text-text-secondary rounded-[var(--radius-full)] border border-border-light">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Back to blog -->
+      <div class="mt-12">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm font-normal text-text-secondary hover:text-gold transition-colors min-h-[48px]"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Voltar para o Blog
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

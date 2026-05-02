@@ -1,0 +1,35 @@
+---
+import WhatsAppIcon from '../ui/icons/WhatsAppIcon.astro';
+---
+<section id="contato" class="section-padding bg-anthracite text-text-inverse relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-anthracite via-anthracite-light to-anthracite"></div>
+
+  <div class="container-magsil relative text-center">
+    <div class="max-w-2xl mx-auto" data-animate>
+      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Fale Conosco</span>
+      <h2 class="mt-4 mb-6 text-offwhite text-balance">Vamos Criar Algo Incrível Juntos</h2>
+      <p class="text-text-muted mb-10 leading-relaxed">
+        Preencha o formulário ou nos contate diretamente. Nossa equipe retorna em até 24 horas úteis.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a
+          href="/contato"
+          class="inline-flex items-center justify-center min-h-[52px] px-8 bg-gold text-anthracite text-base font-normal rounded-[var(--radius-md)] hover:bg-gold-light transition-colors duration-base"
+          id="cta-final-form"
+        >
+          Solicitar Orçamento
+        </a>
+        <a
+          href="https://wa.me/5582999022950?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20solicitar%20um%20orçamento."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 min-h-[52px] px-8 border-2 border-offwhite/20 text-text-inverse text-base font-normal rounded-[var(--radius-md)] hover:border-[#25D366] hover:text-[#25D366] transition-colors duration-base"
+          id="cta-final-whatsapp"
+        >
+          <WhatsAppIcon class="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

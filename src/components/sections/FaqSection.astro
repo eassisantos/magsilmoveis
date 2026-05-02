@@ -1,0 +1,59 @@
+---
+import { ChevronDown } from 'lucide-react';
+
+const faqs = [
+  {
+    question: 'Os móveis podem ficar expostos ao sol e à chuva?',
+    answer: 'Sim. Todas as peças são fabricadas com fibra sintética e corda náutica com proteção UV, e estrutura em alumínio naval antiferrugem. São projetadas para resistir às intempéries sem descascar, desbotar ou oxidar.'
+  },
+  {
+    question: 'Como faço a limpeza e manutenção dos móveis?',
+    answer: 'A manutenção é simples: basta usar água, sabão neutro e uma escova macia. A fibra sintética não absorve umidade e seca rapidamente, dispensando produtos químicos ou cuidados especiais.'
+  },
+  {
+    question: 'Vocês atendem projetos de arquitetura e hotelaria?',
+    answer: 'Sim. Atendemos arquitetos, designers de interiores, hotéis, pousadas e restaurantes com suporte consultivo completo. Oferecemos visita técnica, projeto 3D para aprovação e prazo de entrega garantido por contrato.'
+  },
+  {
+    question: 'Qual o prazo de entrega para peças sob encomenda?',
+    answer: 'O prazo varia conforme a complexidade e a quantidade de peças. Em média, projetos personalizados são entregues entre 15 e 30 dias úteis após a aprovação do orçamento.'
+  },
+  {
+    question: 'Vocês entregam para todo o Brasil?',
+    answer: 'Sim. Realizamos entregas em todo o território nacional com logística especializada, garantindo que cada peça chegue em perfeito estado. Para regiões metropolitanas de Alagoas e estados vizinhos, contamos com equipe própria de instalação.'
+  },
+  {
+    question: 'As cores e medidas podem ser personalizadas?',
+    answer: 'Absolutamente. Trabalhamos com uma ampla cartela de cores de fibra sintética e corda náutica, além de oferecer medidas sob encomenda para se adaptar perfeitamente ao seu espaço.'
+  }
+];
+---
+<section id="faq" class="section-padding bg-offwhite">
+  <div class="container-magsil">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Dúvidas Frequentes</span>
+        <h2 class="mt-4 text-balance">Tudo o Que Você Precisa Saber</h2>
+        <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+      </div>
+
+      <div class="space-y-3">
+        {faqs.map((faq, i) => (
+          <details
+            class="group bg-surface rounded-[var(--radius-lg)] border border-border-light overflow-hidden"
+            data-animate
+            data-animate-delay={String(Math.min(i + 1, 4))}
+          >
+            <summary class="flex items-center justify-between gap-4 cursor-pointer px-6 py-5 min-h-[56px] text-base font-normal text-text-primary hover:text-gold transition-colors duration-base list-none [&::-webkit-details-marker]:hidden">
+              {faq.question}
+              <ChevronDown className="w-5 h-5 flex-shrink-0 text-text-secondary group-open:rotate-180 transition-transform duration-base" aria-hidden="true" />
+            </summary>
+            <div class="px-6 pb-5 text-text-secondary text-base leading-relaxed border-t border-border-light/50 pt-4">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

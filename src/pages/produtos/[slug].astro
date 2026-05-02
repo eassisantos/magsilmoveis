@@ -1,0 +1,352 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CheckCircle2, Shield, Truck, Package, ChevronRight, Star, ArrowRight } from 'lucide-react';
+
+export function getStaticPaths() {
+  const products = [
+    {
+      slug: 'poltrona-vega',
+      name: 'Poltrona Vega',
+      category: 'Poltronas',
+      description: 'Uma obra-prima do design contemporâneo. A Poltrona Vega combina estrutura robusta com uma trama artesanal em corda náutica, oferecendo o equilíbrio perfeito entre conforto ergonômico e sofisticação visual para ambientes internos e externos cobertos.',
+      price: 'R$ 2.490,00',
+      installments: 'ou 10x de R$ 249,00 sem juros',
+      features: ['Estrutura em alumínio reforçado', 'Corda náutica com proteção UV', 'Estofamento de alta densidade', 'Acabamento premium artesanal', 'Garantia estrutural de 2 anos', 'Resistente a intempéries'],
+      image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Aumente o conforto e a elegância da sua sala de estar com a nossa Poltrona Vega, projetada para momentos de relaxamento absoluto.',
+      specs: {
+        width: '80cm',
+        height: '85cm',
+        depth: '75cm',
+        weight: '12kg',
+        materials: 'Alumínio, Corda Náutica, Tecido Impermeável'
+      }
+    },
+    {
+      slug: 'mesa-horizonte',
+      name: 'Mesa Horizonte',
+      category: 'Mesas de Jantar',
+      description: 'A convergência entre a durabilidade e o design elevado. A Mesa Horizonte é o palco ideal para suas melhores memórias em família. Composta por linhas arquitetônicas puras e materiais rigorosamente selecionados.',
+      price: 'R$ 4.890,00',
+      installments: 'ou 10x de R$ 489,00 sem juros',
+      features: ['Base estrutural com design exclusivo', 'Tampo resistente contra riscos e umidade', 'Acabamento com pintura eletrostática', 'Comporta até 8 cadeiras', 'Alta resistência temporal', 'Design atemporal'],
+      image: 'https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1604578762246-41134e37f9cc?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Uma mesa não é só para refeições, é para celebrar a vida. Transforme qualquer jantar num evento especial.',
+      specs: {
+        width: '200cm',
+        height: '75cm',
+        depth: '100cm',
+        weight: '35kg',
+        materials: 'Aço Carbono, Madeira Maciça tratada / Vidro'
+      }
+    },
+    {
+      slug: 'chaise-aurora',
+      name: 'Chaise Aurora',
+      category: 'Chaises',
+      description: 'O relaxamento redefinido. A Chaise Aurora traz um design esculpido pelas formas orgânicas, perfeita para leitura, descanso e para trazer um ar de modernidade de resort de luxo ao seu ambiente.',
+      price: 'R$ 3.190,00',
+      installments: 'ou 10x de R$ 319,00 sem juros',
+      features: ['Curvatura ergonômica biomórfica', 'Tecido Aquablock soft-touch', 'Fibra sintética importada', 'Estrutura ultra-resistente', 'Adequada para área de piscina', 'Tratamento anti-mofo'],
+      image: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Entregue-se ao descanso como você merece. A Chaise Aurora abraça o formato natural do seu corpo.',
+      specs: {
+        width: '70cm',
+        height: '90cm',
+        depth: '180cm',
+        weight: '18kg',
+        materials: 'Alumínio, Fibra Sintética, Tecido Náutico'
+      }
+    },
+    {
+      slug: 'cadeira-brise',
+      name: 'Cadeira Brise',
+      category: 'Mesas & Cadeiras',
+      description: 'Encosto em fibra sintética e estrutura em alumínio.',
+      price: 'R$ 1.290,00',
+      installments: 'ou 10x de R$ 129,00 sem juros',
+      features: ['Estrutura leve em alumínio', 'Encosto anatômico em fibra', 'Pintura automotiva', 'Design elegante', 'Garantia de 2 anos', 'Fácil higienização'],
+      image: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Eleve o padrão das suas refeições com a elegância inconfundível da cadeira Brise.',
+      specs: { width: '50cm', height: '85cm', depth: '55cm', weight: '6kg', materials: 'Alumínio, Fibra Sintética' }
+    },
+    {
+      slug: 'conjunto-solarium',
+      name: 'Conjunto Solarium',
+      category: 'Área Externa',
+      description: 'Mesa e 4 cadeiras em fibra sintética, ideais para compor varandas e espaços gourmet.',
+      price: 'R$ 7.590,00',
+      installments: 'ou 10x de R$ 759,00 sem juros',
+      features: ['Mesa com tampo de vidro 10mm', '4 Poltronas confortáveis', 'Resistência completa a sol e chuva', 'Design integrado', 'Garantia de 2 anos', 'Almofadas impermeáveis inclusas'],
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Crie um resort particular na sua casa e receba amigos com extremo conforto e requinte.',
+      specs: { width: '120cm (Mesa)', height: '75cm (Mesa)', depth: '120cm (Mesa)', weight: '45kg (Conjunto)', materials: 'Alumínio, Fibra Sintética, Vidro' }
+    },
+    {
+      slug: 'espreguicadeira-costa',
+      name: 'Espreguiçadeira Costa',
+      category: 'Área Externa',
+      description: 'Regulagem de inclinação, fibra resistente a UV, perfeita para banhos de sol à beira da piscina.',
+      price: 'R$ 3.490,00',
+      installments: 'ou 10x de R$ 349,00 sem juros',
+      features: ['5 Níveis de inclinação', 'Rodas para fácil transporte', 'Tecido textilene anti-térmico', 'Resistência extrema ao cloro', 'Garantia de 2 anos', 'Estofamento D33'],
+      image: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Aproveite o sol com ergonomia perfeita e sem preocupações com a durabilidade do material.',
+      specs: { width: '65cm', height: '40cm', depth: '200cm', weight: '15kg', materials: 'Alumínio, Fibra Sintética, Textilene' }
+    },
+    {
+      slug: 'banqueta-atelier',
+      name: 'Banqueta Atelier',
+      category: 'Banquetas',
+      description: 'Banqueta alta com corda náutica artesanal, combinando perfeitamente com ilhas gourmet.',
+      price: 'R$ 1.890,00',
+      installments: 'ou 10x de R$ 189,00 sem juros',
+      features: ['Altura ideal para bancadas (1m)', 'Apoio para os pés integrado', 'Corda náutica de trama fechada', 'Base estável e reforçada', 'Garantia de 2 anos', 'Assento ergonômico'],
+      image: 'https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Integre sua cozinha com sofisticação. A banqueta Atelier é a joia do seu espaço gourmet.',
+      specs: { width: '45cm', height: '100cm', depth: '45cm', weight: '7kg', materials: 'Alumínio, Corda Náutica' }
+    },
+    {
+      slug: 'poltrona-ninho',
+      name: 'Poltrona Ninho',
+      category: 'Poltronas',
+      description: 'Poltrona suspensa com cesto em fibra sintética, proporcionando uma sensação única de flutuação e conforto.',
+      price: 'R$ 4.290,00',
+      installments: 'ou 10x de R$ 429,00 sem juros',
+      features: ['Base autoportante inclusa', 'Cesto com trama artesanal complexa', 'Almofadão super macio', 'Balanço suave e seguro', 'Garantia de 2 anos', 'Resistente a áreas externas cobertas'],
+      image: 'https://images.unsplash.com/photo-1519974719765-e6559eac2575?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1519974719765-e6559eac2575?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Seu refúgio particular. Leia, descanse ou apenas relaxe flutuando na Poltrona Ninho.',
+      specs: { width: '105cm', height: '195cm', depth: '105cm', weight: '28kg', materials: 'Aço Carbono, Fibra Sintética, Tecido' }
+    },
+    {
+      slug: 'mesa-bistro-essence',
+      name: 'Mesa Bistro Essence',
+      category: 'Mesas & Cadeiras',
+      description: 'Tampo vidro temperado e base ferro forjado, ideal para varandas pequenas e sacadas de apartamento.',
+      price: 'R$ 2.190,00',
+      installments: 'ou 10x de R$ 219,00 sem juros',
+      features: ['Design compacto e charmoso', 'Tampo de vidro 8mm serigrafado', 'Base com pintura eletrostática', 'Ideal para 2 lugares', 'Garantia de 2 anos', 'Estabilidade superior'],
+      image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+      images: ['https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80'],
+      benefits: 'Transforme pequenos espaços em cenários dignos de cafés parisienses.',
+      specs: { width: '70cm', height: '75cm', depth: '70cm', weight: '14kg', materials: 'Aço, Vidro Temperado' }
+    }
+  ];
+
+  return products.map(product => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const whatsappMessage = encodeURIComponent(`Olá! Gostaria de simular um pedido da ${product.name} ou solicitar uma personalização nas cores e texturas. Poderia me ajudar?`);
+const specsLabels: Record<string, string> = { width: 'Largura', height: 'Altura', depth: 'Profundidade', weight: 'Peso', materials: 'Materiais' };
+---
+
+<BaseLayout 
+  title={`${product.name} | Magsil Móveis de Alto Padrão`} 
+  description={product.description}
+>
+  <main class="min-h-screen bg-offwhite selection:bg-gold selection:text-white">
+    <!-- Breadcrumb -->
+    <div class="container-magsil pt-32 pb-4">
+      <nav aria-label="Localização">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors">Início</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li><a href="/catalogo" class="hover:text-gold transition-colors">Catálogo</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li class="text-text-primary font-medium" aria-current="page">{product.name}</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Product Top Section -->
+    <section class="container-magsil pb-16 md:pb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        
+        <!-- Image Gallery (Simplified for Landing Page impact) -->
+        <div class="space-y-6">
+          <div class="aspect-[4/5] md:aspect-square bg-surface overflow-hidden flex items-center justify-center border border-border group relative">
+            <!-- Simulated Main Image - using placeholder style if missing -->
+            <div class="w-full h-full relative p-12 flex items-center justify-center">
+              <div class="absolute inset-0 bg-gradient-to-tr from-surface to-offwhite opacity-50 z-0"></div>
+              {product.image ? (
+                 <div class="w-full h-full bg-border rounded flex items-center justify-center shadow-2xl relative z-10 overflow-hidden group">
+                    <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                    <span class="text-text-muted font-display text-4xl absolute rotate-[-45deg] opacity-20 select-none">MAGSIL MÓVEIS</span>
+                 </div>
+              ) : (
+                <div class="w-full h-full border-2 border-dashed border-border flex items-center justify-center text-text-muted">Imagem do Produto</div>
+              )}
+            </div>
+            
+            <!-- Badges -->
+            <div class="absolute top-6 left-6 z-20 flex flex-col gap-2">
+               <span class="bg-gold text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 shadow-sm">Premium</span>
+               <span class="bg-surface/95 text-text-primary text-xs font-medium px-4 py-1 border border-border/50">Feito à Mão</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Intel & Purchase CTA -->
+        <div class="flex flex-col justify-center py-6">
+          <div class="mb-4">
+            <span class="text-gold text-xs font-bold uppercase tracking-[0.2em] mb-2 block">{product.category}</span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-medium text-text-primary mb-4 leading-[1.1]">{product.name}</h1>
+            
+            <div class="flex items-center gap-4 text-sm text-text-secondary mb-6">
+              <div class="flex items-center text-gold">
+                <Star className="w-4 h-4 fill-current" />
+                <Star className="w-4 h-4 fill-current" />
+                <Star className="w-4 h-4 fill-current" />
+                <Star className="w-4 h-4 fill-current" />
+                <Star className="w-4 h-4 fill-current" />
+              </div>
+              <span class="text-border">|</span>
+              <span>Design Exclusivo</span>
+              <span class="text-border">|</span>
+              <span class="text-success font-medium flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> Sob Encomenda</span>
+            </div>
+          </div>
+          
+          <p class="text-lg text-text-secondary leading-relaxed mb-8">
+            {product.description}
+          </p>
+
+          <div class="p-6 bg-surface border border-border/50 mb-8 space-y-2">
+            <div class="text-sm tracking-wide text-text-muted uppercase mb-1">Investimento aproximado</div>
+            <div class="text-3xl font-display text-text-primary">{product.price}</div>
+            <div class="text-sm text-text-secondary">{product.installments}</div>
+          </div>
+
+          <!-- Add to Cart / Budget Buttons -->
+          <div class="space-y-4 mb-10">
+            <a 
+              href={`https://wa.me/5511999999999?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full flex items-center justify-center gap-3 bg-gold hover:bg-gold-light text-white px-8 py-5 text-base font-medium transition-all duration-base shadow-sm hover:shadow-xl hover:-translate-y-0.5"
+            >
+              Consultar Consultor Via WhatsApp <ArrowRight className="w-5 h-5" />
+            </a>
+            <p class="text-xs text-center text-text-muted mt-4">Nossa equipe responderá em até 15 minutos em horário comercial para definir medidas, cores e frete.</p>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="grid grid-cols-2 gap-4 pt-6 border-t border-border">
+             <div class="flex items-start gap-3">
+                <Shield className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                <div>
+                   <h4 class="text-sm font-medium text-text-primary">Garantia Estrutural</h4>
+                   <p class="text-xs text-text-secondary mt-0.5">2 anos em todas as peças</p>
+                </div>
+             </div>
+             <div class="flex items-start gap-3">
+                <Truck className="w-5 h-5 text-gold shrink-0 mt-0.5" />
+                <div>
+                   <h4 class="text-sm font-medium text-text-primary">Entrega Segura</h4>
+                   <p class="text-xs text-text-secondary mt-0.5">Transporte especializado</p>
+                </div>
+             </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="border-t border-border bg-surface py-20">
+      <div class="container-magsil">
+         <div class="max-w-3xl mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-display text-text-primary mb-4">A excelência está nos detalhes</h2>
+            <p class="text-text-secondary text-lg">Descubra os atributos construtivos que fazem da {product.name} um móvel de altíssimo padrão, feito para ultrapassar gerações.</p>
+         </div>
+
+         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {product.features.map((feature, index) => (
+              <div class="p-8 bg-offwhite border border-border/40 hover:border-gold/30 transition-colors group">
+                 <div class="w-10 h-10 border border-gold/30 rounded flex items-center justify-center text-gold mb-6 group-hover:bg-gold group-hover:text-white transition-colors">
+                    0{index + 1}
+                 </div>
+                 <h3 class="text-lg font-medium text-text-primary mb-2">{feature}</h3>
+                 <p class="text-sm text-text-secondary">Processo de fabricação auditado para garantir a melhor experiência estética e ergonômica em cada centímetro da peça.</p>
+              </div>
+            ))}
+         </div>
+      </div>
+    </section>
+
+    <!-- Specs Section -->
+    <section class="py-20 bg-anthracite text-white">
+      <div class="container-magsil">
+         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+               <h2 class="text-3xl md:text-4xl font-display text-gold mb-6">Especificações Técnicas</h2>
+               <p class="text-text-muted text-lg mb-10 leading-relaxed max-w-lg">
+                  Nossos móveis são construídos seguindo normas ergonômicas estritas. A personalização das dimensões é possível dependendo do modelo.
+               </p>
+               
+               <dl class="space-y-4 max-w-lg">
+                  {Object.entries(product.specs).map(([key, value]) => {
+                    return (
+                      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                         <dt class="text-white/60 font-medium">{specsLabels[key] || key}</dt>
+                         <dd class="text-white font-light">{value}</dd>
+                      </div>
+                    );
+                  })}
+               </dl>
+               
+               <div class="mt-10 p-6 bg-white/5 border border-white/10">
+                  <div class="flex gap-4">
+                     <Package className="w-6 h-6 text-gold shrink-0" />
+                     <div>
+                        <h4 class="text-base text-white font-medium mb-1">O item chega montado?</h4>
+                        <p class="text-sm text-white/60">A grande maioria das peças Magsil, incluindo este item, é entregue 100% montada e pronta para encantar seu ambiente.</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            
+            <div class="relative w-full aspect-square bg-white/5 p-12 flex flex-col items-center justify-center border border-white/10 rounded-sm">
+               <!-- Abstract representation for dimensions -->
+               <div class="w-[80%] h-[80%] border-2 border-dashed border-white/20 relative flex items-center justify-center">
+                  <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-gold text-sm bg-anthracite px-2">{product.specs.width} (L)</div>
+                  <div class="absolute -right-10 top-1/2 -translate-y-1/2 text-gold text-sm bg-anthracite py-2" style="writing-mode: vertical-rl;">{product.specs.height} (A)</div>
+                  <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-gold text-sm bg-anthracite px-2">{product.specs.depth} (P)</div>
+                  <div class="w-16 h-16 bg-white/10 flex items-center justify-center text-white/40 border border-white/20">3D</div>
+               </div>
+               <p class="mt-8 text-sm text-white/50 text-center max-w-sm">Este é um guia de medidas esquemático. Móveis artesanais podem ter variação milimétrica em sua confecção.</p>
+            </div>
+         </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA / Customization -->
+    <section class="py-24 bg-offwhite border-t border-border relative overflow-hidden">
+       <!-- Decor removido para performance -->
+       <div class="container-magsil text-center max-w-4xl relative z-10">
+          <span class="text-gold uppercase tracking-[0.2em] text-sm font-bold mb-4 block">Design Tailor-Made</span>
+          <h2 class="text-4xl md:text-5xl font-display text-text-primary mb-6">Procurando por cores diferenciadas?</h2>
+          <p class="text-lg text-text-secondary mb-10 leading-relaxed">
+             A personalização é o cerne do nosso negócio. Produzimos a <strong>{product.name}</strong> em uma ampla variedade de cartelas de corda náutica, fibra sintética, tecidos impermeáveis e pinturas eletrostáticas.
+          </p>
+          <a class="inline-flex items-center gap-2 border-b-2 border-gold text-text-primary hover:text-gold pb-1 font-medium transition-colors text-lg group" href={`https://wa.me/5511999999999?text=${whatsappMessage}`}>
+             Receber catálogo de tecidos e cordas
+             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </a>
+       </div>
+    </section>
+
+  </main>
+</BaseLayout>

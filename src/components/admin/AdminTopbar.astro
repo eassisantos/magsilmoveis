@@ -1,0 +1,40 @@
+---
+import { Bell } from 'lucide-react';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<header class="sticky top-0 z-[15] bg-white border-b border-admin-border h-14 px-6 flex items-center justify-between shrink-0">
+
+  <!-- Page Title -->
+  <h1 class="text-lg font-bold text-admin-text">{title}</h1>
+
+  <!-- Right Actions -->
+  <div class="flex items-center gap-1.5">
+    <!-- Search pill with ⌘K -->
+    <button class="hidden md:flex items-center gap-2 px-3 py-1.5 text-sm text-admin-text-muted bg-admin-bg border border-admin-border rounded-full hover:border-admin-text-muted transition-colors">
+      <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <span class="text-[13px] min-w-[72px] text-left">Buscar...</span>
+      <kbd class="text-[10px] font-mono bg-white border border-admin-border rounded px-1 py-0.5 leading-none">⌘K</kbd>
+    </button>
+
+    <!-- Bell -->
+    <button id="btn-notifications" class="relative p-2 rounded-full text-admin-text-muted hover:text-admin-text hover:bg-admin-surface-hover transition-colors" aria-label="Notificações">
+      <Bell className="w-[18px] h-[18px]" />
+      <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+    </button>
+
+    <!-- Dark mode toggle (cosmetic) -->
+    <button id="btn-theme" class="p-2 rounded-full text-admin-text-muted hover:text-admin-text hover:bg-admin-surface-hover transition-colors" aria-label="Alternar tema">
+      <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </div>
+</header>

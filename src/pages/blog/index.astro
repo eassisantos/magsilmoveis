@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+---
+
+<BaseLayout
+  title="Blog — Dicas de Design e Decoração"
+  description="Artigos sobre design de interiores, cuidados com móveis de fibra sintética, tendências de decoração e inspirações para varandas e áreas externas."
+>
+  <section class="section-padding-sm bg-surface">
+    <div class="container-magsil">
+      <nav aria-label="Localização" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
+          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
+          <li class="text-text-primary font-medium" aria-current="page">Blog</li>
+        </ol>
+      </nav>
+      <div class="text-center" data-animate>
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Blog</span>
+      <h1 class="mt-4 mb-4">Dicas & Inspirações</h1>
+      <p class="text-text-secondary max-w-2xl mx-auto">Artigos sobre design, materiais e cuidados para transformar seus ambientes.</p>
+      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+      </div>
+  </section>
+
+  <section class="section-padding bg-offwhite">
+    <div class="container-magsil">
+      {posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post, i) => (
+            <a href={`/blog/${post.id}`} class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift" data-animate data-animate-delay={String((i % 3) + 1)}>
+              <div class="aspect-[16/9] bg-border-light overflow-hidden">
+                {post.data.coverImage ? (
+                  <img src={post.data.coverImage} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center text-text-muted text-sm bg-surface">Imagem</div>
+                )}
+              </div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="text-xs font-normal uppercase tracking-widest text-gold">{post.data.category}</span>
+                </div>
+                <h2 class="text-lg font-normal mb-2 group-hover:text-gold transition-colors">{post.data.title}</h2>
+                <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">{post.data.description}</p>
+                <time class="text-xs text-text-muted" datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-20">
+          <p class="text-text-secondary text-lg">Nenhum artigo publicado ainda.</p>
+          <p class="text-text-muted text-sm mt-2">Em breve teremos conteúdos exclusivos para você.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

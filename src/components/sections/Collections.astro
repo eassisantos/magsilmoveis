@@ -1,0 +1,59 @@
+---
+import { ArrowRight } from 'lucide-react';
+
+const collections = [
+  {
+    title: 'Poltronas & Chaises',
+    description: 'Conforto anatômico com acabamento refinado para áreas de relaxamento e leitura.',
+    image: '/images/collections/sofa.png',
+  },
+  {
+    title: 'Mesas & Cadeiras',
+    description: 'Combinações de elegância e resistência para receber com estilo e funcionalidade.',
+    image: '/images/collections/dining.png',
+  },
+  {
+    title: 'Área Externa',
+    description: 'Durabilidade premium para varandas, jardins e espaços gourmet ao ar livre.',
+    image: '/images/collections/chaise.png',
+  },
+];
+---
+<section id="colecoes" class="section-padding bg-offwhite">
+  <div class="container-magsil">
+    <div class="text-center mb-16" data-animate>
+      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Catálogo</span>
+      <h2 class="mt-4 text-balance">Peças Exclusivas para Ambientes de Alto Padrão</h2>
+      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {collections.map((col, i) => (
+        <div
+          class="group relative rounded-[var(--radius-lg)] p-8 border border-border-light hover-lift cursor-pointer overflow-hidden min-h-[320px] flex flex-col justify-end"
+          data-animate
+          data-animate-delay={String(i + 1)}
+        >
+          <!-- Background Image -->
+          <div class="absolute inset-0 z-0">
+            <img src={col.image} alt={col.title} class="w-full h-full object-cover transition-transform duration-slow group-hover:scale-110" loading="lazy" />
+          </div>
+          <!-- Dark Overlay for contrast -->
+          <div class="absolute inset-0 bg-gradient-to-t from-anthracite via-anthracite/80 to-anthracite/20 z-10"></div>
+          
+          <div class="relative z-20 mt-auto">
+            <h3 class="text-xl mb-3 text-offwhite">{col.title}</h3>
+            <p class="text-text-muted text-sm leading-relaxed mb-6">{col.description}</p>
+            <a
+              href="/catalogo"
+              class="inline-flex items-center gap-2 text-sm font-normal text-gold group-hover:gap-3 transition-all duration-base min-h-[48px]"
+            >
+              Ver detalhes
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

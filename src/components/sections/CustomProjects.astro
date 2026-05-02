@@ -1,0 +1,44 @@
+---
+import { CheckCircle2 } from 'lucide-react';
+---
+<section class="section-padding bg-anthracite text-text-inverse">
+  <div class="container-magsil">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div data-animate data-animate-delay="2">
+        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Projetos sob medida</span>
+        <h2 class="mt-4 mb-6 text-offwhite">Transformamos Referências em Ambientes Únicos</h2>
+        <p class="text-text-muted leading-relaxed mb-8">
+          Atendemos arquitetos, designers de interiores e clientes finais com suporte consultivo completo, do conceito à entrega e instalação.
+        </p>
+        <ul class="space-y-4 mb-10">
+          <li class="flex items-center gap-3 text-text-muted">
+            <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" aria-hidden="true" />
+            Visita técnica sem custo
+          </li>
+          <li class="flex items-center gap-3 text-text-muted">
+            <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" aria-hidden="true" />
+            Projeto 3D para aprovação
+          </li>
+          <li class="flex items-center gap-3 text-text-muted">
+            <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" aria-hidden="true" />
+            Prazo de entrega garantido por contrato
+          </li>
+        </ul>
+        <a
+          href="/contato"
+          class="inline-flex items-center justify-center min-h-[52px] px-8 bg-gold text-anthracite text-base font-normal rounded-[var(--radius-md)] hover:bg-gold-light transition-colors duration-base"
+          id="projects-cta"
+        >
+          Falar com Especialista
+        </a>
+      </div>
+      <div class="relative" data-animate data-animate-delay="1">
+        <div class="aspect-[4/3] rounded-[var(--radius-lg)] bg-anthracite-lighter overflow-hidden border border-anthracite-lighter">
+          <img src="/images/custom-projects.png" alt="Projeto sob medida em área gourmet" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <!-- Decorative element -->
+        <div class="absolute -bottom-4 -right-4 w-24 h-24 border-2 border-gold/30 rounded-[var(--radius-lg)]"></div>
+      </div>
+    </div>
+  </div>
+</section>

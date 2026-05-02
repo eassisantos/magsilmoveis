@@ -1,0 +1,58 @@
+---
+
+
+
+import '../styles/globals.css';
+import BaseHead from '../components/layout/BaseHead.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ChatWidget from '../components/ui/ChatWidget.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <BaseHead {...props} />
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-offwhite text-text-primary antialiased">
+    <!-- Skip to content (accessibility) -->
+    <a href="#main-content" class="skip-to-content" id="skip-link">
+      Pular para o conteúdo principal
+    </a>
+
+    <!-- Header -->
+    <slot name="header">
+      <Header />
+    </slot>
+
+    <!-- Main Content -->
+    <!-- Mobile: header=64px (nav only). Desktop md+: ribbon 32px + nav 64px = 96px -->
+    <main id="main-content" class="flex-1 pt-16 md:pt-24">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+
+    <!-- Chat Widget (guiado, sem IA) -->
+    <ChatWidget />
+
+    <!-- Scroll reveal -->
+    <script src="../scripts/animations.ts"></script>
+  </body>
+</html>
