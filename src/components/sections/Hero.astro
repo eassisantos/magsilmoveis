@@ -1,4 +1,5 @@
 ---
+import { business } from '../../config/business';
 ---
 <section id="inicio" class="relative min-h-[60vh] lg:min-h-[70vh] flex items-center bg-anthracite overflow-hidden">
   <!-- Background Slider -->
@@ -58,7 +59,7 @@
           <span class="text-[11px] md:text-xs text-offwhite/70 uppercase tracking-[0.15em] text-center lg:text-left">Projetos entregues</span>
         </div>
         <div class="flex flex-col gap-1.5 items-center lg:items-start border-x border-offwhite/10 lg:border-x-0 px-2 lg:px-0">
-          <span class="text-2xl md:text-3xl font-light text-offwhite">{new Date().getFullYear() - 2020}<span class="text-gold">+</span></span>
+          <span class="text-2xl md:text-3xl font-light text-offwhite">{new Date().getFullYear() - business.foundingYear}<span class="text-gold">+</span></span>
           <span class="text-[11px] md:text-xs text-offwhite/70 uppercase tracking-[0.15em] text-center lg:text-left">Anos de experiência</span>
         </div>
         <div class="flex flex-col gap-1.5 items-center lg:items-start">

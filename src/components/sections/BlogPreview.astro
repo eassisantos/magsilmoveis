@@ -1,27 +1,35 @@
 ---
-import { getCollection } from 'astro:content';
+import { createSupabaseServerClient } from '../../lib/supabase';
 import { ArrowRight } from 'lucide-react';
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const latestPosts = allPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+let latestPosts: any[] = [];
+try {
+  const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
+  const { data } = await supabase
+    .from('blog_posts')
+    .select('slug, title, excerpt, image_url, published_at')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(3);
+  if (data) latestPosts = data;
+} catch (e) {
+  // silently fail — section simply won't render
+}
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('pt-BR', {
+    day: '2-digit', month: 'long', year: 'numeric',
   });
 }
 ---
-{latestPosts.length > 0 ? (
+{latestPosts.length > 0 && (
   <section class="section-padding bg-surface">
     <div class="container-magsil">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-4" data-animate>
         <div>
           <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Blog</span>
-          <h2 class="mt-4">Dicas & Inspirações</h2>
+          <h2 class="mt-4">Dicas &amp; Inspirações</h2>
         </div>
         <a
           href="/blog"
@@ -35,29 +43,29 @@ function formatDate(date: Date): string {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {latestPosts.map((post, i) => (
           <a
-            href={`/blog/${post.id}`}
+            href={`/blog/${post.slug}`}
             class="group bg-offwhite rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift"
             data-animate
             data-animate-delay={String(i + 1)}
           >
             <div class="aspect-[16/9] bg-surface overflow-hidden">
-              {post.data.coverImage ? (
+              {post.image_url ? (
                 <img
-                  src={post.data.coverImage}
-                  alt={post.data.title}
+                  src={post.image_url}
+                  alt={post.title}
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow"
                   loading="lazy"
                 />
               ) : (
-                <img src="/images/blog-placeholder.png" alt="Capa do artigo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                <div class="w-full h-full bg-border-light flex items-center justify-center text-text-muted text-sm">Sem imagem</div>
               )}
             </div>
             <div class="p-6">
-              <span class="text-xs font-normal uppercase tracking-widest text-gold">{post.data.category}</span>
-              <h3 class="text-lg mt-2 mb-3 group-hover:text-gold transition-colors duration-base">{post.data.title}</h3>
-              <p class="text-text-secondary text-sm leading-relaxed line-clamp-2">{post.data.description}</p>
-              <time class="block mt-4 text-xs text-text-muted" datetime={post.data.pubDate.toISOString()}>
-                {formatDate(post.data.pubDate)}
+              <span class="text-xs font-normal uppercase tracking-widest text-gold">Design</span>
+              <h3 class="text-lg mt-2 mb-3 group-hover:text-gold transition-colors duration-base">{post.title}</h3>
+              <p class="text-text-secondary text-sm leading-relaxed line-clamp-2">{post.excerpt}</p>
+              <time class="block mt-4 text-xs text-text-muted" datetime={post.published_at}>
+                {formatDate(post.published_at)}
               </time>
             </div>
           </a>
@@ -65,29 +73,5 @@ function formatDate(date: Date): string {
       </div>
     </div>
   </section>
-) : (
-  <section class="section-padding bg-surface">
-    <div class="container-narrow text-center" data-animate>
-      <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Blog</span>
-      <h2 class="mt-4 mb-4">Dicas & Inspirações</h2>
-      <div class="w-16 h-0.5 bg-gold mx-auto mb-6"></div>
-      <p class="text-text-secondary leading-relaxed mb-8">
-        Em breve publicaremos guias de decoração, cuidados com móveis externos e tendências de design para você criar ambientes únicos.
-      </p>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <a
-          href="/catalogo"
-          class="inline-flex items-center justify-center min-h-[48px] px-8 bg-anthracite text-text-inverse text-sm font-normal rounded-[var(--radius-md)] hover:bg-anthracite-light transition-colors duration-base"
-        >
-          Explorar o Catálogo
-        </a>
-        <a
-          href="/contato"
-          class="inline-flex items-center justify-center min-h-[48px] px-8 border border-border text-text-primary text-sm font-normal rounded-[var(--radius-md)] hover:border-gold hover:text-gold transition-all duration-base"
-        >
-          Falar com a Equipe
-        </a>
-      </div>
-    </div>
-  </section>
 )}
+
