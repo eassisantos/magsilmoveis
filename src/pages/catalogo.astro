@@ -15,7 +15,7 @@ const categories = [
 let products: any[] = [];
 try {
   const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('products')
     .select('name, slug, description, category, image_url')
     .eq('active', true)

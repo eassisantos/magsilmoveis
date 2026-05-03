@@ -3,14 +3,14 @@ export const prerender = false;
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { createSupabaseServerClient } from '../../lib/supabase';
 import { CheckCircle2 } from 'lucide-react';
-import { business, whatsappLink } from '../../config/business';
+import { whatsappLink } from '../../config/business';
 
 const { slug } = Astro.params;
 
 let product = null;
 try {
   const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('products')
     .select('name, description, category, image_url')
     .eq('slug', slug)
