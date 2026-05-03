@@ -6,9 +6,13 @@ import DOMPurify from 'isomorphic-dompurify';
 
 const { slug } = Astro.params;
 
-let post = null;
+let post: Record<string, any> | null = null;
+let relatedPosts: any[] = [];
+
 try {
   const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
+
+  // Buscar o post principal
   const { data } = await supabase
     .from('blog_posts')
     .select('*')
@@ -18,6 +22,20 @@ try {
 
   if (data) {
     post = data;
+
+    // Buscar posts relacionados (mesma categoria, exceto o atual, máx. 3)
+    if (data.category) {
+      const { data: related } = await supabase
+        .from('blog_posts')
+        .select('slug, title, excerpt, image_url, published_at, category')
+        .eq('status', 'published')
+        .eq('category', data.category)
+        .neq('slug', slug)
+        .order('published_at', { ascending: false })
+        .limit(3);
+
+      relatedPosts = related || [];
+    }
   }
 } catch (e) {
   console.error('Error fetching post:', e);
@@ -27,17 +45,29 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-const cleanHtml = DOMPurify.sanitize(post.content_html, { USE_PROFILES: { html: true } });
+/** Sanitiza HTML e calcula tempo de leitura (palavras em texto puro / 200 wpm). */
+const cleanHtml = DOMPurify.sanitize(post.content_html ?? '', { USE_PROFILES: { html: true } });
+
+function calcReadingTime(html: string): number {
+  const text = html.replace(/<[^>]+>/g, ' ');
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+const readingTime = calcReadingTime(cleanHtml);
+const tags: string[] = Array.isArray(post.tags) ? post.tags : [];
 ---
 
 <BlogLayout
   title={post.title}
-  description={post.excerpt}
+  description={post.excerpt ?? undefined}
   pubDate={new Date(post.published_at || post.created_at)}
-  coverImage={post.image_url}
+  coverImage={post.image_url ?? undefined}
   author="Magsil Móveis"
-  category="Design"
-  tags={['Design', 'Móveis']}
+  category={post.category ?? 'Design'}
+  tags={tags}
+  readingTime={readingTime}
+  relatedPosts={relatedPosts}
 >
   <div set:html={cleanHtml} />
 </BlogLayout>

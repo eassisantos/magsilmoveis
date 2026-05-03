@@ -1,5 +1,16 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { ArrowLeft, Clock, Share2, Link2, MessageCircle } from 'lucide-react';
+import { business, whatsappLink } from '../config/business';
+
+interface RelatedPost {
+  slug: string;
+  title: string;
+  excerpt?: string;
+  image_url?: string;
+  published_at?: string;
+  category?: string;
+}
 
 interface Props {
   title: string;
@@ -10,6 +21,8 @@ interface Props {
   author?: string;
   category?: string;
   tags?: string[];
+  readingTime?: number;
+  relatedPosts?: RelatedPost[];
 }
 
 const {
@@ -19,18 +32,22 @@ const {
   updatedDate,
   coverImage,
   author = 'Magsil Móveis',
-  category,
+  category = 'Design',
   tags = [],
+  readingTime,
+  relatedPosts = [],
 } = Astro.props;
 
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://magsilmoveis.com.br';
+const postUrl = `${siteUrl}/blog/${Astro.url.pathname.split('/').pop()}`;
+const wppShareText = `Leia este artigo da Magsil Móveis: ${title} — ${postUrl}`;
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function formatDateShort(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 ---
 
@@ -43,17 +60,11 @@ function formatDate(date: Date): string {
       headline: title,
       description: description,
       image: coverImage ? new URL(coverImage, siteUrl).toString() : undefined,
-      author: {
-        '@type': 'Person',
-        name: author,
-      },
+      author: { '@type': 'Person', name: author },
       publisher: {
         '@type': 'Organization',
         name: 'Magsil Móveis',
-        logo: {
-          '@type': 'ImageObject',
-          url: `${siteUrl}/images/logo.svg`,
-        },
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/logo.svg` },
       },
       datePublished: pubDate?.toISOString(),
       dateModified: updatedDate?.toISOString() || pubDate?.toISOString(),
@@ -69,10 +80,91 @@ function formatDate(date: Date): string {
     })} />
   </Fragment>
 
-  <article class="section-padding">
-    <div class="container-narrow">
+  <!-- ── Reading Progress Bar ── -->
+  <div
+    id="reading-progress"
+    class="fixed top-0 left-0 h-0.5 bg-gold z-[9999] transition-none"
+    style="width: 0%"
+    role="progressbar"
+    aria-label="Progresso de leitura"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+  ></div>
+
+  <!-- ── Hero Cover ── -->
+  {coverImage ? (
+    <div class="relative w-full h-[45vh] md:h-[55vh] lg:h-[65vh] overflow-hidden bg-anthracite">
+      <img
+        src={coverImage}
+        alt={title}
+        class="w-full h-full object-cover opacity-70"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-anthracite via-anthracite/40 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 right-0 container-magsil pb-10 md:pb-14">
+        {category && (
+          <span class="inline-block text-xs font-medium uppercase tracking-[0.2em] text-gold mb-4 px-3 py-1 bg-anthracite/50 rounded-full border border-gold/30">
+            {category}
+          </span>
+        )}
+        <h1 class="text-2xl md:text-4xl lg:text-5xl font-light text-offwhite leading-tight max-w-4xl text-balance">
+          {title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-4 mt-4 text-sm text-offwhite/70">
+          <span>Por <strong class="text-offwhite font-normal">{author}</strong></span>
+          {pubDate && (
+            <time datetime={pubDate.toISOString()} class="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+              {formatDate(pubDate)}
+            </time>
+          )}
+          {readingTime && (
+            <span class="flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-offwhite/40"></span>
+              {readingTime} min de leitura
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div class="section-padding-sm bg-anthracite pt-24">
+      <div class="container-magsil">
+        {category && (
+          <span class="inline-block text-xs font-medium uppercase tracking-[0.2em] text-gold mb-4">
+            {category}
+          </span>
+        )}
+        <h1 class="text-3xl md:text-5xl font-light text-offwhite leading-tight max-w-4xl text-balance mb-6">
+          {title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-4 text-sm text-offwhite/70">
+          <span>Por <strong class="text-offwhite font-normal">{author}</strong></span>
+          {pubDate && (
+            <time datetime={pubDate.toISOString()} class="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+              {formatDate(pubDate)}
+            </time>
+          )}
+          {readingTime && (
+            <span class="flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-offwhite/40"></span>
+              {readingTime} min de leitura
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  )}
+
+  <!-- ── Article ── -->
+  <article class="bg-surface">
+    <div class="container-narrow py-12 md:py-16">
+
       <!-- Breadcrumbs -->
-      <nav aria-label="Localização" class="mb-8">
+      <nav aria-label="Localização" class="mb-10">
         <ol class="flex flex-wrap items-center gap-1.5 text-sm text-text-muted" role="list">
           <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
           <li aria-hidden="true" class="text-border">›</li>
@@ -82,67 +174,35 @@ function formatDate(date: Date): string {
         </ol>
       </nav>
 
-      <!-- Article Header -->
-      <header class="mb-12">
-        {category && (
-          <span class="inline-block text-xs font-normal uppercase tracking-widest text-gold mb-4">
-            {category}
-          </span>
-        )}
-        <h1 class="text-balance mb-6">{title}</h1>
-        <div class="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
-          <span>Por <strong class="text-text-primary">{author}</strong></span>
-          {pubDate && (
-            <time datetime={pubDate.toISOString()} class="flex items-center gap-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              {formatDate(pubDate)}
-            </time>
-          )}
-          {updatedDate && (
-            <time datetime={updatedDate.toISOString()} class="text-text-muted">
-              (Atualizado em {formatDate(updatedDate)})
-            </time>
-          )}
-        </div>
-      </header>
-
-      <!-- Cover Image -->
-      {coverImage && (
-        <div class="rounded-[var(--radius-lg)] overflow-hidden mb-12 shadow-md">
-          <img
-            src={coverImage}
-            alt={title}
-            class="w-full h-auto aspect-[16/9] object-cover"
-            loading="eager"
-          />
-        </div>
-      )}
-
       <!-- Article Body -->
       <div class="prose prose-lg max-w-none
         prose-headings:font-[family-name:var(--font-heading)]
-        prose-headings:text-anthracite
+        prose-headings:text-anthracite prose-headings:font-normal
         prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
         prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-        prose-p:text-text-primary prose-p:leading-relaxed
+        prose-p:text-text-primary prose-p:leading-[1.85] prose-p:text-[1.05rem]
         prose-a:text-gold prose-a:font-normal prose-a:no-underline hover:prose-a:underline
-        prose-strong:text-anthracite
+        prose-strong:text-anthracite prose-strong:font-medium
         prose-img:rounded-[var(--radius-lg)] prose-img:shadow-md
-        prose-blockquote:border-gold prose-blockquote:bg-surface prose-blockquote:rounded-r-[var(--radius-md)] prose-blockquote:py-1
-        prose-code:bg-surface prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-[var(--radius-sm)]
+        prose-blockquote:border-l-4 prose-blockquote:border-gold prose-blockquote:bg-offwhite
+        prose-blockquote:rounded-r-[var(--radius-md)] prose-blockquote:py-2 prose-blockquote:px-6
+        prose-blockquote:text-text-secondary prose-blockquote:not-italic
+        prose-code:bg-offwhite prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-[var(--radius-sm)]
+        prose-code:text-gold prose-code:text-[0.9em] prose-code:font-normal
         prose-pre:bg-anthracite prose-pre:rounded-[var(--radius-md)]
-      ">
+        prose-li:text-text-primary prose-li:leading-relaxed
+        prose-hr:border-border-light
+      " id="article-body">
         <slot />
       </div>
 
       <!-- Tags -->
       {tags.length > 0 && (
-        <div class="mt-12 pt-8 border-t border-border">
+        <div class="mt-12 pt-8 border-t border-border-light">
+          <p class="text-xs font-medium uppercase tracking-[0.15em] text-text-muted mb-3">Tags</p>
           <div class="flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <span class="inline-flex items-center px-3 py-1 text-xs font-normal bg-surface text-text-secondary rounded-[var(--radius-full)] border border-border-light">
+              <span class="inline-flex items-center px-3 py-1 text-xs font-normal bg-offwhite text-text-secondary rounded-full border border-border-light hover:border-gold hover:text-gold transition-colors cursor-default">
                 #{tag}
               </span>
             ))}
@@ -150,18 +210,159 @@ function formatDate(date: Date): string {
         </div>
       )}
 
-      <!-- Back to blog -->
-      <div class="mt-12">
+      <!-- Share + Navigation -->
+      <div class="mt-10 pt-8 border-t border-border-light flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <!-- Back -->
         <a
           href="/blog"
           class="inline-flex items-center gap-2 text-sm font-normal text-text-secondary hover:text-gold transition-colors min-h-[48px]"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           Voltar para o Blog
+        </a>
+
+        <!-- Share Buttons -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-text-muted uppercase tracking-wider mr-1">Compartilhar</span>
+          <a
+            href={whatsappLink(wppShareText)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors"
+            aria-label="Compartilhar no WhatsApp"
+          >
+            <MessageCircle className="w-4 h-4" aria-hidden="true" />
+          </a>
+          <button
+            id="copy-link-btn"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-offwhite text-text-secondary hover:bg-gold hover:text-anthracite transition-colors border border-border-light"
+            aria-label="Copiar link do artigo"
+            data-url={postUrl}
+          >
+            <Link2 className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Updated date -->
+      {updatedDate && (
+        <p class="mt-4 text-xs text-text-muted">
+          Atualizado em <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time>
+        </p>
+      )}
+    </div>
+  </article>
+
+  <!-- ── Related Posts ── -->
+  {relatedPosts.length > 0 && (
+    <section class="section-padding bg-offwhite border-t border-border-light">
+      <div class="container-magsil">
+        <div class="flex items-center gap-4 mb-8">
+          <span class="text-gold text-xs font-medium uppercase tracking-[0.2em]">Continue Lendo</span>
+          <div class="flex-1 h-px bg-border-light"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedPosts.map((p) => (
+            <a
+              href={`/blog/${p.slug}`}
+              class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift"
+            >
+              <div class="aspect-[16/9] bg-border-light overflow-hidden">
+                {p.image_url ? (
+                  <img src={p.image_url} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                ) : (
+                  <div class="w-full h-full bg-offwhite flex items-center justify-center text-text-muted text-xs">Sem imagem</div>
+                )}
+              </div>
+              <div class="p-5">
+                {p.category && <span class="text-[10px] uppercase tracking-widest text-gold font-medium">{p.category}</span>}
+                <h3 class="text-base font-normal mt-1 mb-2 group-hover:text-gold transition-colors line-clamp-2">{p.title}</h3>
+                {p.published_at && <time class="text-xs text-text-muted">{formatDateShort(p.published_at)}</time>}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ── CTA Final ── -->
+  <section class="py-14 bg-anthracite text-text-inverse">
+    <div class="container-magsil text-center">
+      <span class="text-gold text-xs font-medium uppercase tracking-[0.2em] block mb-3">Gostou do conteúdo?</span>
+      <h2 class="text-2xl md:text-3xl font-light text-offwhite mb-4 text-balance max-w-2xl mx-auto">
+        Transforme seu espaço com móveis artesanais de alto padrão
+      </h2>
+      <p class="text-text-muted mb-8 max-w-lg mx-auto">
+        Nossa equipe está pronta para ajudar você a criar o ambiente dos seus sonhos. Fale com um especialista.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href={whatsappLink(business.tagline)}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center min-h-[52px] px-8 bg-gold text-anthracite text-sm font-medium rounded-[var(--radius-md)] hover:bg-gold-light transition-colors"
+        >
+          Falar no WhatsApp
+        </a>
+        <a
+          href="/catalogo"
+          class="inline-flex items-center justify-center min-h-[52px] px-8 border border-offwhite/20 text-offwhite text-sm font-normal rounded-[var(--radius-md)] hover:border-offwhite transition-colors"
+        >
+          Ver Catálogo
         </a>
       </div>
     </div>
-  </article>
+  </section>
+
 </BaseLayout>
+
+<script>
+  // ── Reading Progress Bar ──
+  function initReadingProgress() {
+    const bar = document.getElementById('reading-progress');
+    const article = document.getElementById('article-body');
+    if (!bar || !article) return;
+
+    const update = () => {
+      const rect = article.getBoundingClientRect();
+      const articleHeight = article.offsetHeight;
+      const scrolled = -rect.top;
+      const pct = Math.min(Math.max((scrolled / articleHeight) * 100, 0), 100);
+      bar.style.width = `${pct}%`;
+      bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    };
+
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  // ── Copy Link ──
+  function initCopyLink() {
+    const btn = document.getElementById('copy-link-btn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const url = btn.getAttribute('data-url') || window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.setAttribute('aria-label', 'Link copiado!');
+        btn.classList.add('bg-gold', 'text-anthracite');
+        setTimeout(() => {
+          btn.setAttribute('aria-label', 'Copiar link do artigo');
+          btn.classList.remove('bg-gold', 'text-anthracite');
+        }, 2000);
+      } catch {
+        // fallback silencioso
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initReadingProgress();
+    initCopyLink();
+  });
+  if (document.readyState !== 'loading') {
+    initReadingProgress();
+    initCopyLink();
+  }
+</script>

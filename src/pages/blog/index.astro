@@ -2,79 +2,136 @@
 export const prerender = false;
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { createSupabaseServerClient } from '../../lib/supabase';
+import { Clock } from 'lucide-react';
 
-let posts: any[] = [];
+interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  image_url: string | null;
+  published_at: string | null;
+  category: string | null;
+}
+
+let posts: BlogPost[] = [];
 try {
   const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
   const { data } = await supabase
     .from('blog_posts')
-    .select('slug, title, excerpt, image_url, published_at')
+    .select('slug, title, excerpt, image_url, published_at, category')
     .eq('status', 'published')
     .order('published_at', { ascending: false });
-    
-  if (data) {
-    posts = data;
-  }
+
+  if (data) posts = data as BlogPost[];
 } catch (e) {
   console.error('Error fetching blog posts:', e);
 }
 
-function formatDate(dateStr: string): string {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+/** Estimativa de tempo de leitura com base no excerpt (aprox. 200 palavras/min). */
+function readingTime(text: string | null): number {
+  if (!text) return 1;
+  return Math.max(1, Math.ceil(text.split(/\s+/).length / 200));
 }
+
+function formatDate(dateStr: string | null): string {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+// Categorias únicas para filtros futuros
+const categories = [...new Set(posts.map((p) => p.category).filter(Boolean))];
 ---
 
 <BaseLayout
-  title="Blog — Dicas de Design e Decoração"
+  title="Blog — Dicas de Design e Decoração | Magsil Móveis"
   description="Artigos sobre design de interiores, cuidados com móveis de fibra sintética, tendências de decoração e inspirações para varandas e áreas externas."
 >
-  <section class="section-padding-sm bg-surface">
-    <div class="container-magsil">
-      <nav aria-label="Localização" class="mb-6">
-        <ol class="flex flex-wrap items-center gap-2 text-sm text-text-secondary" role="list">
-          <li><a href="/" class="hover:text-gold transition-colors duration-base">Início</a></li>
-          <li aria-hidden="true" class="text-gold/50 text-xs">•</li>
-          <li class="text-text-primary font-medium" aria-current="page">Blog</li>
+  <!-- Hero da listagem -->
+  <section class="section-padding-sm bg-anthracite">
+    <div class="container-magsil text-center">
+      <nav aria-label="Localização" class="mb-6 flex justify-center">
+        <ol class="flex flex-wrap items-center justify-center gap-2 text-sm text-offwhite/50" role="list">
+          <li><a href="/" class="hover:text-gold transition-colors">Início</a></li>
+          <li aria-hidden="true" class="text-gold/30">›</li>
+          <li class="text-offwhite/80" aria-current="page">Blog</li>
         </ol>
       </nav>
-      <div class="text-center" data-animate>
-        <span class="text-gold text-sm font-normal uppercase tracking-[0.2em]">Blog</span>
-      <h1 class="mt-4 mb-4">Dicas & Inspirações</h1>
-      <p class="text-text-secondary max-w-2xl mx-auto">Artigos sobre design, materiais e cuidados para transformar seus ambientes.</p>
-      <div class="w-16 h-0.5 bg-gold mx-auto mt-6"></div>
-      </div>
+      <span class="text-gold text-xs font-medium uppercase tracking-[0.2em] mb-4 block" data-animate>Blog</span>
+      <h1 class="text-3xl md:text-5xl font-light text-offwhite mb-4 text-balance" data-animate data-animate-delay="1">
+        Dicas & Inspirações
+      </h1>
+      <p class="text-offwhite/60 max-w-xl mx-auto" data-animate data-animate-delay="2">
+        Design, materiais e ideias para transformar seus ambientes com estilo e durabilidade.
+      </p>
+    </div>
   </section>
 
+  <!-- Grid de posts -->
   <section class="section-padding bg-offwhite">
     <div class="container-magsil">
       {posts.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post, i) => (
-            <a href={`/blog/${post.slug}`} class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift" data-animate data-animate-delay={String((i % 3) + 1)}>
-              <div class="aspect-[16/9] bg-border-light overflow-hidden">
+            <a
+              href={`/blog/${post.slug}`}
+              class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift flex flex-col"
+              data-animate
+              data-animate-delay={String((i % 3) + 1)}
+            >
+              <!-- Thumbnail -->
+              <div class="aspect-[16/9] bg-border-light overflow-hidden relative">
                 {post.image_url ? (
-                  <img src={post.image_url} alt={post.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow"
+                    loading="lazy"
+                  />
                 ) : (
-                  <div class="w-full h-full flex items-center justify-center text-text-muted text-sm bg-surface">Sem Imagem</div>
+                  <div class="w-full h-full bg-offwhite flex items-center justify-center">
+                    <span class="text-text-muted text-sm">Magsil Móveis</span>
+                  </div>
+                )}
+                {post.category && (
+                  <span class="absolute top-3 left-3 text-[10px] font-medium uppercase tracking-[0.15em] bg-anthracite/80 text-gold px-2.5 py-1 rounded-full">
+                    {post.category}
+                  </span>
                 )}
               </div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-3">
-                  <span class="text-xs font-normal uppercase tracking-widest text-gold">Design</span>
+
+              <!-- Content -->
+              <div class="p-6 flex flex-col flex-1">
+                <h2 class="text-lg font-normal mb-2 group-hover:text-gold transition-colors line-clamp-2 flex-1">
+                  {post.title}
+                </h2>
+                {post.excerpt && (
+                  <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">
+                    {post.excerpt}
+                  </p>
+                )}
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-border-light/50">
+                  <time class="text-xs text-text-muted" datetime={post.published_at ?? ''}>
+                    {formatDate(post.published_at)}
+                  </time>
+                  <span class="flex items-center gap-1 text-xs text-text-muted">
+                    <Clock className="w-3 h-3" aria-hidden="true" />
+                    {readingTime(post.excerpt)} min
+                  </span>
                 </div>
-                <h2 class="text-lg font-normal mb-2 group-hover:text-gold transition-colors">{post.title}</h2>
-                <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">{post.excerpt}</p>
-                <time class="text-xs text-text-muted" datetime={post.published_at}>{formatDate(post.published_at)}</time>
               </div>
             </a>
           ))}
         </div>
       ) : (
-        <div class="text-center py-20">
-          <p class="text-text-secondary text-lg">Nenhum artigo publicado ainda.</p>
-          <p class="text-text-muted text-sm mt-2">Em breve teremos conteúdos exclusivos para você.</p>
+        <div class="text-center py-24">
+          <p class="text-text-secondary text-lg mb-2">Nenhum artigo publicado ainda.</p>
+          <p class="text-text-muted text-sm mb-8">Em breve teremos conteúdos exclusivos para você.</p>
+          <a
+            href="/catalogo"
+            class="inline-flex items-center justify-center min-h-[48px] px-8 bg-anthracite text-offwhite text-sm font-normal rounded-[var(--radius-md)] hover:bg-gold hover:text-anthracite transition-colors"
+          >
+            Explorar o Catálogo
+          </a>
         </div>
       )}
     </div>
