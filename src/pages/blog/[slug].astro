@@ -1,0 +1,43 @@
+---
+export const prerender = false;
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { createSupabaseServerClient } from '../../lib/supabase';
+import DOMPurify from 'isomorphic-dompurify';
+
+const { slug } = Astro.params;
+
+let post = null;
+try {
+  const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single();
+
+  if (data) {
+    post = data;
+  }
+} catch (e) {
+  console.error('Error fetching post:', e);
+}
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const cleanHtml = DOMPurify.sanitize(post.content_html, { USE_PROFILES: { html: true } });
+---
+
+<BlogLayout
+  title={post.title}
+  description={post.excerpt}
+  pubDate={new Date(post.published_at || post.created_at)}
+  coverImage={post.image_url}
+  author="Magsil Móveis"
+  category="Design"
+  tags={['Design', 'Móveis']}
+>
+  <div set:html={cleanHtml} />
+</BlogLayout>

@@ -25,59 +25,7 @@ const whatsappQuoteUrl = whatsappLink(whatsappMessages.quote);
   id="site-header"
   class="sticky top-0 z-[var(--z-sticky)]"
 >
-  <!-- ── Ribbon utilitário (desktop) ── -->
-  <div id="top-ribbon" class="hidden md:block bg-anthracite">
-    <div class="container-magsil">
-      <div class="flex items-center justify-between h-8 text-[11px] text-text-on-dark">
-        <div class="flex items-center gap-5">
-          <a
-            href={business.phone.tel}
-            class="flex items-center gap-1.5 hover:text-gold-light transition-colors duration-base"
-            aria-label={`Ligar: ${business.phone.formatted}`}
-          >
-            <Phone className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
-            {business.phone.formatted}
-          </a>
-          <a
-            href={`mailto:${business.email}`}
-            class="flex items-center gap-1.5 hover:text-gold-light transition-colors duration-base"
-          >
-            {business.email}
-          </a>
-        </div>
-        <!-- Redes sociais -->
-        <div class="flex items-center gap-3" aria-label="Redes sociais">
-          <a
-            href={business.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-on-dark hover:text-gold transition-colors duration-base flex items-center"
-            aria-label="Instagram (abre em nova aba)"
-          >
-            <InstagramIcon class="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
-          <a
-            href={business.social.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-on-dark hover:text-gold transition-colors duration-base flex items-center"
-            aria-label="Facebook (abre em nova aba)"
-          >
-            <FacebookIcon class="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
-          <a
-            href={business.social.tiktok}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-text-on-dark hover:text-gold transition-colors duration-base flex items-center"
-            aria-label="TikTok (abre em nova aba)"
-          >
-            <TikTokIcon class="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- ── Barra de navegação principal (clara) ── -->
   <div class="bg-offwhite border-b border-border-light transition-shadow duration-300" id="main-navbar">

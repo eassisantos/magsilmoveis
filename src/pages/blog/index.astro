@@ -1,14 +1,29 @@
 ---
+export const prerender = false;
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { createSupabaseServerClient } from '../../lib/supabase';
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+let posts: any[] = [];
+try {
+  const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('slug, title, excerpt, image_url, published_at')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+    
+  if (data) {
+    posts = data;
+  }
+} catch (e) {
+  console.error('Error fetching blog posts:', e);
 }
 
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
 ---
 
 <BaseLayout
@@ -37,21 +52,21 @@ function formatDate(date: Date): string {
       {posts.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post, i) => (
-            <a href={`/blog/${post.id}`} class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift" data-animate data-animate-delay={String((i % 3) + 1)}>
+            <a href={`/blog/${post.slug}`} class="group bg-surface rounded-[var(--radius-lg)] overflow-hidden border border-border-light hover-lift" data-animate data-animate-delay={String((i % 3) + 1)}>
               <div class="aspect-[16/9] bg-border-light overflow-hidden">
-                {post.data.coverImage ? (
-                  <img src={post.data.coverImage} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                {post.image_url ? (
+                  <img src={post.image_url} alt={post.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
                 ) : (
-                  <div class="w-full h-full flex items-center justify-center text-text-muted text-sm bg-surface">Imagem</div>
+                  <div class="w-full h-full flex items-center justify-center text-text-muted text-sm bg-surface">Sem Imagem</div>
                 )}
               </div>
               <div class="p-6">
                 <div class="flex items-center gap-3 mb-3">
-                  <span class="text-xs font-normal uppercase tracking-widest text-gold">{post.data.category}</span>
+                  <span class="text-xs font-normal uppercase tracking-widest text-gold">Design</span>
                 </div>
-                <h2 class="text-lg font-normal mb-2 group-hover:text-gold transition-colors">{post.data.title}</h2>
-                <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">{post.data.description}</p>
-                <time class="text-xs text-text-muted" datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                <h2 class="text-lg font-normal mb-2 group-hover:text-gold transition-colors">{post.title}</h2>
+                <p class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">{post.excerpt}</p>
+                <time class="text-xs text-text-muted" datetime={post.published_at}>{formatDate(post.published_at)}</time>
               </div>
             </a>
           ))}

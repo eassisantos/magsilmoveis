@@ -41,9 +41,9 @@ const categoryLabels: Record<string, string> = {
       <button class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-admin-surface border border-admin-border rounded-lg text-admin-text-muted hover:bg-admin-surface-hover transition-colors">
         <Filter className="w-4 h-4" /> Filtros
       </button>
-      <button disabled={!supabaseUrl} class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-admin-accent text-white rounded-lg hover:bg-admin-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+      <a href="/admin/produtos/novo" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-admin-accent text-white rounded-lg hover:bg-admin-accent-hover transition-colors">
         <Plus className="w-4 h-4" /> Novo Produto
-      </button>
+      </a>
     </div>
   </div>
 
