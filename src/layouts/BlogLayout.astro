@@ -64,7 +64,7 @@ function formatDateShort(dateStr: string): string {
       publisher: {
         '@type': 'Organization',
         name: 'Magsil Móveis',
-        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/logo.png` },
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/logo.webp` },
       },
       datePublished: pubDate?.toISOString(),
       dateModified: updatedDate?.toISOString() || pubDate?.toISOString(),
@@ -271,7 +271,7 @@ function formatDateShort(dateStr: string): string {
                 {p.image_url ? (
                   <img src={p.image_url} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
                 ) : (
-                  <img src="/images/blog-fallback.png" alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
+                  <img src="/images/blog-fallback.webp" alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow" loading="lazy" />
                 )}
               </div>
               <div class="p-5">

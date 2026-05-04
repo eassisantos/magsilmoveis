@@ -33,6 +33,12 @@ const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).toString(
 <link rel="canonical" href={canonicalUrl} />
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
+<!-- Resource Hints — CDNs externos usados no runtime -->
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin />
+<link rel="dns-prefetch" href="https://cdn.sanity.io" />
+<link rel="preconnect" href="https://graph.instagram.com" />
+<link rel="dns-prefetch" href="https://graph.instagram.com" />
+
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={canonicalUrl} />

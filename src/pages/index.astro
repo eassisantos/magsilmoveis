@@ -16,6 +16,14 @@ import InstaGallery from '../components/sections/InstaGallery.astro';
   title="Magsil Móveis | Corda Náutica e Fibra Sintética · Arapiraca/AL"
   description="Móveis artesanais em corda náutica e fibra sintética UV. Design autoral, estrutura em alumínio naval, resistência climática. Projetos personalizados para varandas, hotéis e restaurantes. Arapiraca/AL."
 >
+  <!-- Preload do LCP (primeira imagem do hero slider) -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href="/images/products/poltrona-vega.webp"
+    type="image/webp"
+  />
   <Hero />
   <AboutHeritage />
   <CorporateLogos />

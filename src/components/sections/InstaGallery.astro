@@ -3,11 +3,11 @@ import { Heart } from 'lucide-react';
 import InstagramIcon from '../ui/icons/InstagramIcon.astro';
 
 const lifestyleImages = [
-  { src: '/images/lifestyle/poolside.png', alt: 'Chaises de fibra sintética à beira da piscina ao pôr do sol' },
-  { src: '/images/lifestyle/balcony.png', alt: 'Varanda gourmet com poltronas de corda náutica e vista para a cidade' },
-  { src: '/images/lifestyle/garden.png', alt: 'Jantar ao ar livre com conjunto de mesa rattan em jardim iluminado' },
-  { src: '/images/lifestyle/veranda.png', alt: 'Sofá de canto em fibra sintética em varanda tropical coberta' },
-  { src: '/images/lifestyle/restaurant.png', alt: 'Restaurante à beira-mar com cadeiras de fibra sintética' },
+  { src: '/images/lifestyle/poolside.webp', alt: 'Chaises de fibra sintética à beira da piscina ao pôr do sol' },
+  { src: '/images/lifestyle/balcony.webp', alt: 'Varanda gourmet com poltronas de corda náutica e vista para a cidade' },
+  { src: '/images/lifestyle/garden.webp', alt: 'Jantar ao ar livre com conjunto de mesa rattan em jardim iluminado' },
+  { src: '/images/lifestyle/veranda.webp', alt: 'Sofá de canto em fibra sintética em varanda tropical coberta' },
+  { src: '/images/lifestyle/restaurant.webp', alt: 'Restaurante à beira-mar com cadeiras de fibra sintética' },
 ];
 
 const token = import.meta.env.INSTAGRAM_ACCESS_TOKEN;
@@ -60,6 +60,9 @@ const displayImages = igImages.length >= 5
             alt={img.alt} 
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[600ms] ease-out"
             loading="lazy"
+            decoding="async"
+            width="600"
+            height="600"
           />
           <!-- Hover overlay -->
           <div class="absolute inset-0 bg-anthracite/60 opacity-0 group-hover:opacity-100 transition-opacity duration-base flex items-center justify-center gap-4">

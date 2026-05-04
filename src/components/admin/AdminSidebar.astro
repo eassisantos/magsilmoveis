@@ -1,15 +1,12 @@
 ---
-import { LayoutDashboard, Users, FileText, Package, MessageSquare, LogOut, ExternalLink } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, ExternalLink, DatabaseZap } from 'lucide-react';
 
 const user = Astro.locals.user;
 const pathname = Astro.url.pathname;
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-  { href: '/admin/produtos', icon: Package, label: 'Produtos', exact: false },
   { href: '/admin/leads', icon: Users, label: 'Leads', exact: false },
-  { href: '/admin/posts', icon: FileText, label: 'Posts', exact: false },
-  { href: '/admin/depoimentos', icon: MessageSquare, label: 'Depoimentos', exact: false },
 ];
 
 function isActive(href: string, exact: boolean): boolean {
@@ -56,6 +53,15 @@ function isActive(href: string, exact: boolean): boolean {
       class="flex items-center justify-center w-full h-10 rounded-lg text-[#7D6560] hover:text-[#D4B89A] hover:bg-[#3D2525] transition-colors"
     >
       <ExternalLink className="w-[18px] h-[18px]" strokeWidth={1.75} />
+    </a>
+    <a
+      href="https://magsilmoveis.sanity.studio"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Sanity Studio (CMS)"
+      class="flex items-center justify-center w-full h-10 rounded-lg text-[#7D6560] hover:text-[#C4A882] hover:bg-[#3D2525] transition-colors"
+    >
+      <DatabaseZap className="w-[18px] h-[18px]" strokeWidth={1.75} />
     </a>
     <form action="/api/auth/logout" method="POST" class="w-full">
       <button

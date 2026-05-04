@@ -2,45 +2,20 @@
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import GoogleIcon from '../ui/icons/GoogleIcon.astro';
 import InstagramIcon from '../ui/icons/InstagramIcon.astro';
+import { getActiveTestimonials } from '../../lib/sanity';
 
-const testimonials = [
-  {
-    name: 'Cindy Maciel',
-    source: 'Google',
-    content: 'Ótimo atendimento, produtos de excelente qualidade. Comprei móveis para minha residência e amei.',
-    rating: 5,
-  },
-  {
-    name: 'Ewersson Assis',
-    source: 'Google',
-    content: 'O atendimento é bom, os produtos são ótimos e entregam super rápido.',
-    rating: 5,
-  },
-  {
-    name: 'Neusene Nobre',
-    source: 'Google',
-    content: 'Gostei muito. Uma perfeição. Recomendo a todos que buscam qualidade e bom gosto em móveis para área externa.',
-    rating: 5,
-  },
-  {
-    name: 'Cristiano Moreira',
-    source: 'Google',
-    content: 'Ótimo atendimento e móveis de altíssima qualidade. O acabamento das peças é impecável.',
-    rating: 5,
-  },
-  {
-    name: 'Gilberto Vital',
-    source: 'Google',
-    content: 'Móveis artesanais lindíssimos. O cuidado no trançado da corda náutica é perceptível em cada detalhe.',
-    rating: 5,
-  },
-  {
-    name: 'Cliente via Instagram',
-    source: 'Instagram',
-    content: 'Estou muito contente com meu jogo, pelo conforto, pela elegância, por ser discreto e belo. Já estou de olho em outra peça que com certeza irei comprar.',
-    rating: 5,
-  },
+// Fallback estático caso Sanity não esteja configurado ainda
+const fallbackTestimonials = [
+  { _id: '1', name: 'Cindy Maciel', source: 'Google', content: 'Ótimo atendimento, produtos de excelente qualidade. Comprei móveis para minha residência e amei.', rating: 5 },
+  { _id: '2', name: 'Ewersson Assis', source: 'Google', content: 'O atendimento é bom, os produtos são ótimos e entregam super rápido.', rating: 5 },
+  { _id: '3', name: 'Neusene Nobre', source: 'Google', content: 'Gostei muito. Uma perfeição. Recomendo a todos que buscam qualidade e bom gosto em móveis para área externa.', rating: 5 },
+  { _id: '4', name: 'Cristiano Moreira', source: 'Google', content: 'Ótimo atendimento e móveis de altíssima qualidade. O acabamento das peças é impecável.', rating: 5 },
+  { _id: '5', name: 'Gilberto Vital', source: 'Google', content: 'Móveis artesanais lindíssimos. O cuidado no trançado da corda náutica é perceptível em cada detalhe.', rating: 5 },
+  { _id: '6', name: 'Cliente via Instagram', source: 'Instagram', content: 'Estou muito contente com meu jogo, pelo conforto, pela elegância, por ser discreto e belo.', rating: 5 },
 ];
+
+const testimonials = await getActiveTestimonials().catch(() => fallbackTestimonials);
+const displayTestimonials = testimonials.length > 0 ? testimonials : fallbackTestimonials;
 ---
 <section id="depoimentos" class="section-padding bg-surface overflow-hidden">
   <div class="container-magsil">
@@ -81,7 +56,7 @@ const testimonials = [
     <!-- Carousel Container -->
     <div class="relative -mx-4 px-4 md:mx-0 md:px-0">
       <div id="testimonial-track" class="flex gap-6 md:gap-8 transition-transform duration-500 ease-out cursor-grab active:cursor-grabbing w-full overflow-hidden" data-animate data-animate-delay="1">
-        {testimonials.map((test) => (
+        {displayTestimonials.map((test) => (
           <div class="w-[85vw] sm:w-[50vw] md:w-[calc(33.333%-1.33rem)] flex-shrink-0">
             <div class="bg-offwhite rounded-[var(--radius-lg)] p-8 border border-border-light h-full flex flex-col shadow-sm">
               <div class="flex items-center justify-between mb-6">
@@ -113,7 +88,7 @@ const testimonials = [
 
     <!-- Dots indicator -->
     <div id="testimonial-dots" class="flex justify-center gap-2 mt-8">
-      {Array.from({ length: Math.ceil(testimonials.length / 1) }).map((_, i) => (
+      {Array.from({ length: Math.ceil(displayTestimonials.length / 1) }).map((_, i) => (
         <button 
           class="testimonial-dot relative w-2.5 h-2.5 rounded-full bg-border transition-colors duration-base before:content-[''] before:absolute before:w-12 before:h-12 before:-top-[19px] before:-left-[19px] before:rounded-full" 
           data-index={String(i)}

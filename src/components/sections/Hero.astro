@@ -3,11 +3,35 @@ import { business } from '../../config/business';
 ---
 <section id="inicio" class="relative min-h-[60vh] lg:min-h-[70vh] flex items-center bg-anthracite overflow-hidden">
   <!-- Background Slider -->
+  <!--
+    LCP FIX: O primeiro slide usa <img fetchpriority="high"> em vez de
+    background-image CSS — isso permite ao browser preload automático do
+    recurso crítico antes de parsear o CSS.
+    Os slides subsequentes ficam ocultos e são carregados sob demanda.
+  -->
   <div id="hero-slider" class="absolute inset-0 w-full h-full opacity-60">
-    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-100" style="background-image: url('/images/products/poltrona-vega.png')"></div>
-    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/products/mesa-essencia.png')"></div>
-    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/products/chaise-aurora.png')"></div>
-    <div class="hero-slide absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-[6000ms] ease-in-out opacity-0" style="background-image: url('/images/collections/sofa.png')"></div>
+    <!-- Slide 1: LCP — eager, alta prioridade -->
+    <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-[6000ms] ease-in-out opacity-100">
+      <img
+        src="/images/products/poltrona-vega.webp"
+        alt="Poltrona Vega de fibra sintética - Magsil Móveis"
+        class="w-full h-full object-cover object-center"
+        fetchpriority="high"
+        decoding="sync"
+        width="1920"
+        height="1080"
+      />
+    </div>
+    <!-- Slides 2-4: lazy, sem prioridade -->
+    <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-[6000ms] ease-in-out opacity-0">
+      <img src="/images/products/mesa-essencia.webp" alt="Mesa Essência - Magsil Móveis" class="w-full h-full object-cover object-center" loading="lazy" decoding="async" width="1920" height="1080" />
+    </div>
+    <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-[6000ms] ease-in-out opacity-0">
+      <img src="/images/products/chaise-aurora.webp" alt="Chaise Aurora - Magsil Móveis" class="w-full h-full object-cover object-center" loading="lazy" decoding="async" width="1920" height="1080" />
+    </div>
+    <div class="hero-slide absolute inset-0 w-full h-full transition-opacity duration-[6000ms] ease-in-out opacity-0">
+      <img src="/images/collections/sofa.webp" alt="Coleção sofás - Magsil Móveis" class="w-full h-full object-cover object-center" loading="lazy" decoding="async" width="1920" height="1080" />
+    </div>
   </div>
   
   <!-- Texture overlay (simulating weave/trama) -->

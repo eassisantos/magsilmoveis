@@ -10,7 +10,10 @@ const textPrimary = theme === 'dark' ? 'text-text-inverse' : 'text-anthracite';
 
 <div class:list={["flex items-center justify-start group", className]}>
   <img 
-    src="/images/logo.png" 
+    src="/images/logo.webp"
+    loading="eager"
+    decoding="sync"
+    fetchpriority="high" 
     alt="Magsil Móveis" 
     class:list={[
       "w-auto h-full object-contain transition-transform duration-base group-hover:scale-[1.02]",

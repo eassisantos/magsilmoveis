@@ -1,73 +1,70 @@
 ---
-export const prerender = false;
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import { createSupabaseServerClient } from '../../lib/supabase';
-import DOMPurify from 'isomorphic-dompurify';
+import {
+  getBlogPostBySlug,
+  getRelatedBlogPosts,
+  getAllBlogSlugs,
+  urlFor,
+  blocksToPlainText,
+} from '../../lib/sanity';
+import { toHTML } from '@portabletext/to-html';
+
+export async function getStaticPaths() {
+  const slugs = await getAllBlogSlugs().catch(() => []);
+  return slugs.map(slug => ({ params: { slug } }));
+}
 
 const { slug } = Astro.params;
 
-let post: Record<string, any> | null = null;
-let relatedPosts: any[] = [];
-
-try {
-  const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
-
-  // Buscar o post principal
-  const { data } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', slug)
-    .eq('status', 'published')
-    .single();
-
-  if (data) {
-    post = data;
-
-    // Buscar posts relacionados (mesma categoria, exceto o atual, máx. 3)
-    if (data.category) {
-      const { data: related } = await supabase
-        .from('blog_posts')
-        .select('slug, title, excerpt, image_url, published_at, category')
-        .eq('status', 'published')
-        .eq('category', data.category)
-        .neq('slug', slug)
-        .order('published_at', { ascending: false })
-        .limit(3);
-
-      relatedPosts = related || [];
-    }
-  }
-} catch (e) {
-  console.error('Error fetching post:', e);
-}
+const post = await getBlogPostBySlug(slug!).catch(() => null);
 
 if (!post) {
   return Astro.redirect('/404');
 }
 
-/** Sanitiza HTML e calcula tempo de leitura (palavras em texto puro / 200 wpm). */
-const cleanHtml = DOMPurify.sanitize(post.content_html ?? '', { USE_PROFILES: { html: true } });
+const relatedPosts = post.category
+  ? await getRelatedBlogPosts(post.slug, post.category, 3).catch(() => [])
+  : [];
 
-function calcReadingTime(html: string): number {
-  const text = html.replace(/<[^>]+>/g, ' ');
+const contentHtml = post.content?.length
+  ? toHTML(post.content, { components: {} })
+  : '';
+
+const tags: string[] = post.tags ?? [];
+
+const coverImageUrl = post.mainImage
+  ? urlFor(post.mainImage).width(1200).height(630).auto('format').quality(85).url()
+  : undefined;
+
+function calcReadingTime(blocks: any[] | undefined): number {
+  const text = blocksToPlainText(blocks ?? []);
   const words = text.trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 200));
 }
 
-const readingTime = calcReadingTime(cleanHtml);
-const tags: string[] = Array.isArray(post.tags) ? post.tags : [];
+const readingTime = post.readingTimeMinutes ?? calcReadingTime(post.content);
+
+// Normalizar related posts para o contrato do BlogLayout
+const relatedForLayout = relatedPosts.map(r => ({
+  slug: r.slug,
+  title: r.title,
+  excerpt: r.excerpt ?? undefined,
+  image_url: r.mainImage ? urlFor(r.mainImage).width(400).height(225).auto('format').quality(75).url() : undefined,
+  published_at: r.publishedAt ?? undefined,
+  category: r.category ?? undefined,
+}));
 ---
 
 <BlogLayout
-  title={post.title}
-  description={post.excerpt ?? undefined}
-  pubDate={new Date(post.published_at || post.created_at)}
-  coverImage={post.image_url ?? undefined}
+  title={post.seo?.metaTitle ?? post.title}
+  description={post.seo?.metaDescription ?? post.excerpt}
+  pubDate={post.publishedAt ? new Date(post.publishedAt) : undefined}
+  coverImage={coverImageUrl}
   author="Magsil Móveis"
   category={post.category ?? 'Design'}
   tags={tags}
   readingTime={readingTime}
-  relatedPosts={relatedPosts}
+  relatedPosts={relatedForLayout}
 >
-  <div set:html={cleanHtml} />
+  <div set:html={contentHtml} />
 </BlogLayout>

@@ -1,39 +1,31 @@
 ---
-export const prerender = false;
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { createSupabaseServerClient } from '../../lib/supabase';
+import { getProductBySlug, getAllProductSlugs, urlFor } from '../../lib/sanity';
 import { CheckCircle2 } from 'lucide-react';
 import { whatsappLink } from '../../config/business';
 
+export async function getStaticPaths() {
+  const slugs = await getAllProductSlugs().catch(() => []);
+  return slugs.map(slug => ({ params: { slug } }));
+}
+
 const { slug } = Astro.params;
 
-let product = null;
-try {
-  const supabase = createSupabaseServerClient(Astro.request, Astro.cookies);
-  const { data } = await supabase
-    .from('products')
-    .select('name, description, category, image_url')
-    .eq('slug', slug)
-    .eq('active', true)
-    .single();
-    
-  if (data) {
-    product = {
-      ...data,
-      image: data.image_url || 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80',
-      images: [data.image_url || 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80'],
-      features: ['Personalizável em cores e medidas', 'Fabricação artesanal de alto padrão', 'Resistente a intempéries e raios UV', 'Estrutura em alumínio reforçado'],
-      benefits: data.description,
-      specs: {}
-    };
-  }
-} catch (e) {
-  console.error('Error fetching product:', e);
-}
+const productData = await getProductBySlug(slug!).catch(() => null);
 
-if (!product) {
+if (!productData) {
   return Astro.redirect('/404');
 }
+
+const product = {
+  ...productData,
+  image: productData.mainImage
+    ? urlFor(productData.mainImage).width(900).height(675).auto('format').quality(85).url()
+    : 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80',
+  features: productData.features?.length
+    ? productData.features
+    : ['Personalizável em cores e medidas', 'Fabricação artesanal de alto padrão', 'Resistente a intempéries e raios UV', 'Estrutura em alumínio reforçado'],
+};
 
 const wppMsg = `Olá! Gostaria de saber mais sobre o produto *${product.name}* que vi no site.`;
 const wppUrl = whatsappLink(wppMsg);
@@ -60,7 +52,7 @@ const wppUrl = whatsappLink(wppMsg);
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
         <!-- Image -->
         <div class="rounded-[var(--radius-lg)] overflow-hidden bg-offwhite border border-border-light aspect-[4/3] lg:aspect-auto lg:h-[600px] shadow-sm" data-animate>
-          <img src={product.image} alt={product.name} class="w-full h-full object-cover" />
+          <img src={product.image} alt={product.name} class="w-full h-full object-cover" fetchpriority="high" decoding="sync" loading="eager" />
         </div>
 
         <!-- Details -->

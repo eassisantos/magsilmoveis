@@ -13,28 +13,39 @@ let totalPosts = 0;
 let totalTestimonials = 0;
 let recentLeads: Array<{name: string; email: string; status: string; created_at: string}> = [];
 
+// ── Leads (Supabase — fonte correta para CRM) ─────────────────────────────
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 if (supabaseUrl) {
   try {
     const { createSupabaseAdmin } = await import('../../lib/supabase');
     const supabase = createSupabaseAdmin();
-    const [l, nl, cl, prod, posts, dep, leads] = await Promise.all([
+    const [l, nl, cl, leads] = await Promise.all([
       supabase.from('leads').select('*', { count: 'exact', head: true }),
       supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'novo'),
       supabase.from('leads').select('*', { count: 'exact', head: true }).eq('status', 'convertido'),
-      supabase.from('products').select('*', { count: 'exact', head: true }).eq('active', true),
-      supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
-      supabase.from('testimonials').select('*', { count: 'exact', head: true }).eq('active', true),
       supabase.from('leads').select('name, email, status, created_at').order('created_at', { ascending: false }).limit(5),
     ]);
     totalLeads = l.count || 0;
     newLeads = nl.count || 0;
     convertedLeads = cl.count || 0;
-    totalProducts = prod.count || 0;
-    totalPosts = posts.count || 0;
-    totalTestimonials = dep.count || 0;
     recentLeads = leads.data || [];
-  } catch (e) { console.error('Dashboard error:', e); }
+  } catch (e) { console.error('Dashboard leads error:', e); }
+}
+
+// ── Conteúdo (Sanity — fonte canônica do CMS) ────────────────────────────
+const sanityProjectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID;
+if (sanityProjectId) {
+  try {
+    const { sanityClient } = await import('../../lib/sanity');
+    const [prodCount, postsCount, depCount] = await Promise.all([
+      sanityClient.fetch<number>(`count(*[_type == "product" && active == true])`),
+      sanityClient.fetch<number>(`count(*[_type == "blogPost" && status == "published"])`),
+      sanityClient.fetch<number>(`count(*[_type == "testimonial" && active == true])`),
+    ]);
+    totalProducts = prodCount ?? 0;
+    totalPosts = postsCount ?? 0;
+    totalTestimonials = depCount ?? 0;
+  } catch (e) { console.error('Dashboard Sanity error:', e); }
 }
 
 const statusLabels: Record<string, { text: string; variant: string }> = {

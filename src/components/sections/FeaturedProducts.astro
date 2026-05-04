@@ -5,7 +5,7 @@ const featuredProducts = [
   {
     name: 'Poltrona Vega',
     category: 'Corda Náutica',
-    image: '/images/products/poltrona-vega.png',
+    image: '/images/products/poltrona-vega.webp',
     materials: 'Alumínio Naval T6 • Pintura Eletrostática',
     specs: [
       { icon: Sun, text: 'Proteção UV Máxima' },
@@ -18,7 +18,7 @@ const featuredProducts = [
   {
     name: 'Chaise Aurora',
     category: 'Fibra Sintética',
-    image: '/images/products/chaise-aurora.png',
+    image: '/images/products/chaise-aurora.webp',
     materials: 'Trama Dupla Premium • Alumínio Naval',
     specs: [
       { icon: Droplets, text: 'Estofado Aquablock' },
@@ -31,7 +31,7 @@ const featuredProducts = [
   {
     name: 'Conjunto Jantar Essência',
     category: 'Área Externa',
-    image: '/images/products/mesa-essencia.png',
+    image: '/images/products/mesa-essencia.webp',
     materials: 'Tampo em Vidro Temperado 8mm',
     specs: [
       { icon: ShieldCheck, text: 'Estrutura ultra-reforçada' },
@@ -78,6 +78,9 @@ const featuredProducts = [
               alt={product.name} 
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out relative z-10"
               loading="lazy"
+              decoding="async"
+              width="800"
+              height="600"
             />
             <div class="absolute inset-0 z-20 bg-anthracite/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
           </div>
