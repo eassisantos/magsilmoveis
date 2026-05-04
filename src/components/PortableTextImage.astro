@@ -1,0 +1,52 @@
+---
+/**
+ * PortableTextImage.astro
+ *
+ * Renderiza blocos de imagem dentro do Portable Text.
+ * Usa @sanity/image-url para gerar URLs otimizadas do Sanity CDN.
+ */
+import { urlFor } from '../lib/sanity'
+
+// props injetadas pelo astro-portabletext
+const { node } = Astro.props as {
+  node: {
+    asset?: { _ref: string; _type: string }
+    alt?: string
+    caption?: string
+    hotspot?: { x: number; y: number }
+    crop?: object
+  }
+}
+
+const { asset, alt, caption } = node
+
+const webpUrl = asset
+  ? urlFor(node).width(1200).format('webp').quality(85).url()
+  : null
+
+const fallbackUrl = asset
+  ? urlFor(node).width(1200).quality(85).url()
+  : null
+---
+
+{webpUrl && (
+  <figure class="my-8">
+    <picture>
+      <source srcset={webpUrl} type="image/webp" />
+      <img
+        src={fallbackUrl!}
+        alt={alt ?? ''}
+        loading="lazy"
+        decoding="async"
+        width="1200"
+        height="675"
+        class="w-full rounded-lg object-cover"
+      />
+    </picture>
+    {caption && (
+      <figcaption class="mt-2 text-center text-sm text-stone-500 italic">
+        {caption}
+      </figcaption>
+    )}
+  </figure>
+)}

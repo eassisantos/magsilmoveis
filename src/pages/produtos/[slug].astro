@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getProductBySlug, getAllProductSlugs, urlFor } from '../../lib/sanity';
+import { getAllProductSlugs, urlFor, type SanityProduct } from '../../lib/sanity';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { PRODUCT_BY_SLUG_QUERY } from '../../sanity/lib/queries';
 import { CheckCircle2 } from 'lucide-react';
 import { whatsappLink } from '../../config/business';
 
@@ -11,7 +13,10 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-const productData = await getProductBySlug(slug!).catch(() => null);
+const { data: productData } = await loadQuery<SanityProduct>({
+  query: PRODUCT_BY_SLUG_QUERY,
+  params: { slug },
+}).catch(() => ({ data: null }));
 
 if (!productData) {
   return Astro.redirect('/404');

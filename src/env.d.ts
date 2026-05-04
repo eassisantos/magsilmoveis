@@ -1,4 +1,5 @@
 /// <reference types="astro/client" />
+/// <reference types="@sanity/astro/module" />
 
 // Declara módulos de fonte instalados que não possuem tipagens próprias
 
@@ -11,7 +12,10 @@ interface ImportMetaEnv {
   // Sanity CMS (conteúdo)
   readonly PUBLIC_SANITY_PROJECT_ID: string;
   readonly PUBLIC_SANITY_DATASET: string;
-  readonly SANITY_API_TOKEN?: string;         // read token para o script de indexação
+  readonly SANITY_API_TOKEN?: string;                   // write token (indexação)
+  readonly SANITY_API_READ_TOKEN?: string;              // viewer token (Visual Editing / drafts)
+  readonly PUBLIC_SANITY_VISUAL_EDITING_ENABLED?: string; // 'true' em ambientes de preview
+  readonly SANITY_PREVIEW_SECRET?: string;               // gerado pelo Presentation Tool (draft mode)
 
   // Algolia Search
   readonly PUBLIC_ALGOLIA_APP_ID: string;

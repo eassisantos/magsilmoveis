@@ -13,6 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
       phone: formData.get('phone'),
       projectType: formData.get('projectType'),
       message: formData.get('message'),
+      turnstileToken: formData.get('turnstileToken') ?? formData.get('cf-turnstile-response'),
     };
 
     // Step A: Validate with Zod
@@ -21,6 +22,34 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({ error: 'Dados inválidos', details: parsed.error.flatten() }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Step A.1: Validate anti-spam (Cloudflare Turnstile) se a chave estiver configurada
+    const turnstileSecret = import.meta.env.TURNSTILE_SECRET_KEY;
+    if (turnstileSecret && parsed.data.turnstileToken) {
+      const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          secret: turnstileSecret,
+          response: parsed.data.turnstileToken,
+          remoteip: request.headers.get('x-forwarded-for') || '',
+        }),
+      });
+      const verifyResult = await verifyResponse.json();
+      if (!verifyResult.success) {
+        console.error('Turnstile validation failed:', verifyResult);
+        return new Response(
+          JSON.stringify({ error: 'Falha na verificação de segurança (Anti-Spam). Tente novamente.' }),
+          { status: 403, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    } else if (turnstileSecret && !parsed.data.turnstileToken) {
+      // Se a chave existe na Vercel mas o client não mandou o token
+      return new Response(
+        JSON.stringify({ error: 'Validação de segurança ausente. Atualize a página e tente novamente.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
 

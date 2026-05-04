@@ -1,13 +1,9 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import {
-  getBlogPostBySlug,
-  getRelatedBlogPosts,
-  getAllBlogSlugs,
-  urlFor,
-  blocksToPlainText,
-} from '../../lib/sanity';
-import { toHTML } from '@portabletext/to-html';
+import PortableText from '../../components/PortableText.astro';
+import { getAllBlogSlugs, urlFor, blocksToPlainText, type SanityBlogPost } from '../../lib/sanity';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { BLOG_POST_BY_SLUG_QUERY, RELATED_BLOG_POSTS_QUERY } from '../../sanity/lib/queries';
 
 export async function getStaticPaths() {
   const slugs = await getAllBlogSlugs().catch(() => []);
@@ -16,19 +12,21 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-const post = await getBlogPostBySlug(slug!).catch(() => null);
+const { data: post } = await loadQuery<SanityBlogPost>({
+  query: BLOG_POST_BY_SLUG_QUERY,
+  params: { slug },
+}).catch(() => ({ data: null }));
 
 if (!post) {
   return Astro.redirect('/404');
 }
 
-const relatedPosts = post.category
-  ? await getRelatedBlogPosts(post.slug, post.category, 3).catch(() => [])
-  : [];
-
-const contentHtml = post.content?.length
-  ? toHTML(post.content, { components: {} })
-  : '';
+const { data: relatedPosts } = post.category
+  ? await loadQuery<SanityBlogPost[]>({
+      query: RELATED_BLOG_POSTS_QUERY,
+      params: { slug: post.slug, category: post.category, limit: 3 },
+    }).catch(() => ({ data: [] as SanityBlogPost[] }))
+  : { data: [] as SanityBlogPost[] };
 
 const tags: string[] = post.tags ?? [];
 
@@ -66,5 +64,8 @@ const relatedForLayout = relatedPosts.map(r => ({
   readingTime={readingTime}
   relatedPosts={relatedForLayout}
 >
-  <div set:html={contentHtml} />
+  {post.content?.length
+    ? <PortableText value={post.content} />
+    : <p class="text-stone-500 italic">Conteúdo em breve.</p>
+  }
 </BlogLayout>

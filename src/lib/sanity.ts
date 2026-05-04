@@ -1,24 +1,31 @@
-import { createClient } from '@sanity/client'
+import { sanityClient } from 'sanity:client'
 import { createImageUrlBuilder } from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import {
+  PRODUCTS_QUERY,
+  FEATURED_PRODUCTS_QUERY,
+  PRODUCT_BY_SLUG_QUERY,
+  ALL_PRODUCT_SLUGS_QUERY,
+  ALL_BLOG_POSTS_QUERY,
+  LATEST_BLOG_POSTS_QUERY,
+  BLOG_POST_BY_SLUG_QUERY,
+  RELATED_BLOG_POSTS_QUERY,
+  ALL_BLOG_SLUGS_QUERY,
+  ACTIVE_TESTIMONIALS_QUERY,
+} from '../sanity/lib/queries'
 
-// ─── Client ────────────────────────────────────────────────────────────────
+// ─── Re-export do client configurado via @sanity/astro (astro.config.mjs) ──
+export { sanityClient }
 
-const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'placeholder'
-const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production'
-const isSanityConfigured = import.meta.env.PUBLIC_SANITY_PROJECT_ID != null
-
-export const sanityClient = createClient({
-  projectId,
-  dataset,
-  apiVersion: '2024-01-01',
-  useCdn: true,
-  perspective: 'published',
-})
+// Guard para queries opcionais em build sem variáveis configuradas
+const isSanityConfigured = !!import.meta.env.PUBLIC_SANITY_PROJECT_ID
 
 // ─── Image URL Builder ──────────────────────────────────────────────────────
-
-const builder = createImageUrlBuilder(sanityClient)
+// Usa config direta (evita deprecation do default export em versões antigas do adaptador)
+const builder = createImageUrlBuilder({
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID ?? 'placeholder',
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET ?? 'production',
+})
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source)
@@ -77,67 +84,22 @@ export interface SanityTestimonial {
 
 export async function getAllProducts(): Promise<SanityProduct[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "product" && active == true] | order(sortOrder asc) {
-      _id,
-      name,
-      "slug": slug.current,
-      description,
-      category,
-      mainImage,
-      images,
-      materials,
-      features,
-      startingPrice,
-      active,
-      featured,
-      sortOrder
-    }
-  `)
+  return sanityClient.fetch(PRODUCTS_QUERY)
 }
 
 export async function getFeaturedProducts(): Promise<SanityProduct[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "product" && active == true && featured == true] | order(sortOrder asc) [0...6] {
-      _id,
-      name,
-      "slug": slug.current,
-      description,
-      category,
-      mainImage,
-      materials,
-      features,
-      startingPrice
-    }
-  `)
+  return sanityClient.fetch(FEATURED_PRODUCTS_QUERY)
 }
 
 export async function getProductBySlug(slug: string): Promise<SanityProduct | null> {
   if (!isSanityConfigured) return null
-  return sanityClient.fetch(`
-    *[_type == "product" && slug.current == $slug && active == true][0] {
-      _id,
-      name,
-      "slug": slug.current,
-      description,
-      category,
-      mainImage,
-      images,
-      materials,
-      features,
-      startingPrice
-    }
-  `, { slug })
+  return sanityClient.fetch(PRODUCT_BY_SLUG_QUERY, { slug })
 }
 
 export async function getAllProductSlugs(): Promise<string[]> {
   if (!isSanityConfigured) return []
-  const results = await sanityClient.fetch<Array<{ slug: string }>>(`
-    *[_type == "product" && active == true] {
-      "slug": slug.current
-    }
-  `)
+  const results = await sanityClient.fetch<Array<{ slug: string }>>(ALL_PRODUCT_SLUGS_QUERY)
   return results.map(r => r.slug)
 }
 
@@ -145,81 +107,27 @@ export async function getAllProductSlugs(): Promise<string[]> {
 
 export async function getAllBlogPosts(): Promise<SanityBlogPost[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "blogPost" && status == "published"] | order(publishedAt desc) {
-      _id,
-      title,
-      "slug": slug.current,
-      excerpt,
-      mainImage,
-      category,
-      tags,
-      status,
-      publishedAt,
-      readingTimeMinutes
-    }
-  `)
+  return sanityClient.fetch(ALL_BLOG_POSTS_QUERY)
 }
 
 export async function getLatestBlogPosts(limit: number = 3): Promise<SanityBlogPost[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "blogPost" && status == "published"] | order(publishedAt desc) [0...$limit] {
-      _id,
-      title,
-      "slug": slug.current,
-      excerpt,
-      mainImage,
-      category,
-      publishedAt,
-      readingTimeMinutes
-    }
-  `, { limit })
+  return sanityClient.fetch(LATEST_BLOG_POSTS_QUERY, { limit })
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<SanityBlogPost | null> {
   if (!isSanityConfigured) return null
-  return sanityClient.fetch(`
-    *[_type == "blogPost" && slug.current == $slug && status == "published"][0] {
-      _id,
-      title,
-      "slug": slug.current,
-      excerpt,
-      mainImage,
-      category,
-      tags,
-      content,
-      status,
-      publishedAt,
-      readingTimeMinutes,
-      seo
-    }
-  `, { slug })
+  return sanityClient.fetch(BLOG_POST_BY_SLUG_QUERY, { slug })
 }
 
 export async function getRelatedBlogPosts(slug: string, category: string, limit: number = 3): Promise<SanityBlogPost[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "blogPost" && status == "published" && slug.current != $slug && category == $category] | order(publishedAt desc) [0...$limit] {
-      _id,
-      title,
-      "slug": slug.current,
-      excerpt,
-      mainImage,
-      category,
-      publishedAt,
-      readingTimeMinutes
-    }
-  `, { slug, category, limit })
+  return sanityClient.fetch(RELATED_BLOG_POSTS_QUERY, { slug, category, limit })
 }
 
 export async function getAllBlogSlugs(): Promise<string[]> {
   if (!isSanityConfigured) return []
-  const results = await sanityClient.fetch<Array<{ slug: string }>>(`
-    *[_type == "blogPost" && status == "published"] {
-      "slug": slug.current
-    }
-  `)
+  const results = await sanityClient.fetch<Array<{ slug: string }>>(ALL_BLOG_SLUGS_QUERY)
   return results.map(r => r.slug)
 }
 
@@ -227,18 +135,7 @@ export async function getAllBlogSlugs(): Promise<string[]> {
 
 export async function getActiveTestimonials(): Promise<SanityTestimonial[]> {
   if (!isSanityConfigured) return []
-  return sanityClient.fetch(`
-    *[_type == "testimonial" && active == true] | order(sortOrder asc) {
-      _id,
-      name,
-      source,
-      content,
-      rating,
-      photo,
-      featured,
-      sortOrder
-    }
-  `)
+  return sanityClient.fetch(ACTIVE_TESTIMONIALS_QUERY)
 }
 
 // ─── Portable Text serializer (raw blocks → plain text, for RAG indexing) ────
