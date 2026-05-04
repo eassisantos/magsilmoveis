@@ -11,7 +11,7 @@
 [![Deploy](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)](https://vercel.com)
 [![License](https://img.shields.io/badge/Licença-Privado-red)](LICENSE)
 
-[🌐 magsilmoveis.com.br](https://magsilmoveis.com.br) · [📋 Issues](https://github.com/eassisantos/magsilmoveis/issues) · [📖 Documentação](./docs/ARCHITECTURE.md)
+[🌐 magsilmoveis.com.br](https://magsilmoveis.com.br) · [📋 Issues](https://github.com/eassisantos/magsilmoveis/issues) · [📖 Guia de Deploy](./docs/DEPLOY.md)
 
 </div>
 

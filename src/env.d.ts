@@ -17,18 +17,6 @@ interface ImportMetaEnv {
   readonly PUBLIC_SANITY_VISUAL_EDITING_ENABLED?: string; // 'true' em ambientes de preview
   readonly SANITY_PREVIEW_SECRET?: string;               // gerado pelo Presentation Tool (draft mode)
 
-  // Algolia Search
-  readonly PUBLIC_ALGOLIA_APP_ID: string;
-  readonly PUBLIC_ALGOLIA_SEARCH_KEY: string;
-  readonly ALGOLIA_WRITE_KEY?: string;        // apenas server-side
-
-  // OpenAI (chatbot)
-  readonly OPENAI_API_KEY?: string;
-
-  // Pinecone (RAG)
-  readonly PINECONE_API_KEY?: string;
-  readonly PINECONE_INDEX?: string;
-
   // Email
   readonly RESEND_API_KEY: string;
 
