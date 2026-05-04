@@ -36,7 +36,7 @@ O projeto é construído com foco em:
 | Framework | [Astro](https://astro.build) | 6.x |
 | UI Interativa | [React](https://react.dev) (ilhas) | 19.x |
 | Estilização | [Tailwind CSS](https://tailwindcss.com) v4 via `@tailwindcss/vite` | 4.x |
-| Linguagem | TypeScript (`strict: true`) | 5.x |
+| Linguagem | TypeScript (`strict: true`) | 6.x |
 | Banco de dados & Auth | [Supabase](https://supabase.com) (`@supabase/ssr`) | 2.x |
 | Validação | [Zod](https://zod.dev) | 4.x |
 | Sanitização | `isomorphic-dompurify` | 3.x |

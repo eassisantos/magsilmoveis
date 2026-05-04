@@ -57,7 +57,12 @@ function formatDate(dateStr: string): string {
                   loading="lazy"
                 />
               ) : (
-                <div class="w-full h-full bg-border-light flex items-center justify-center text-text-muted text-sm">Sem imagem</div>
+                <img
+                  src="/images/blog-fallback.png"
+                  alt={post.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow"
+                  loading="lazy"
+                />
               )}
             </div>
             <div class="p-6">

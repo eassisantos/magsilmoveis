@@ -56,7 +56,7 @@ if (Astro.request.method === 'POST') {
   }
 }
 
-const inputClass = 'w-full px-3 py-2.5 border border-admin-border rounded-lg bg-admin-surface text-admin-text text-sm focus:outline-none focus:ring-2 focus:ring-admin-accent/40 focus:border-admin-accent transition-colors placeholder:text-admin-text-muted/50';
+const inputClass = 'w-full px-3 py-2.5 border border-admin-border rounded-lg bg-admin-surface text-admin-text text-sm focus:outline-none focus:ring-2 focus:ring-admin-accent/40 focus:border-admin-accent transition-colors';
 const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
 ---
 
@@ -97,7 +97,6 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
             name="title"
             required
             class={inputClass}
-            placeholder="Ex: Tendências de Decoração 2025"
           />
         </div>
         <div>
@@ -111,7 +110,6 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
             name="slug"
             required
             class={`${inputClass} font-mono`}
-            placeholder="tendencias-de-decoracao-2025"
           />
         </div>
       </div>
@@ -143,7 +141,7 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
           name="excerpt"
           rows="2"
           class={inputClass}
-          placeholder="Breve chamada exibida na listagem e nas redes sociais..."
+          class={inputClass}
         ></textarea>
         <p class="text-xs text-admin-text-muted mt-1">Recomendado: até 160 caracteres para SEO.</p>
       </div>
@@ -157,7 +155,7 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
           required
           rows="14"
           class={`${inputClass} font-mono text-xs leading-relaxed`}
-          placeholder="<h2>Introdução</h2>&#10;<p>Escreva o corpo do artigo aqui em HTML...</p>"
+          class={`${inputClass} font-mono text-xs leading-relaxed`}
         ></textarea>
         <p class="text-xs text-admin-text-muted mt-1">
           O conteúdo será sanitizado (DOMPurify) automaticamente antes de ser exibido.
@@ -173,7 +171,7 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
             id="post-image"
             name="image_url"
             class={inputClass}
-            placeholder="https://images.unsplash.com/..."
+            class={inputClass}
           />
           <p class="text-xs text-admin-text-muted mt-1">Proporção ideal: 16:9 (ex: 1600×900px).</p>
         </div>
@@ -184,7 +182,7 @@ const labelClass = 'block text-sm font-medium text-admin-text mb-1.5';
             id="post-tags"
             name="tags"
             class={inputClass}
-            placeholder="fibra-sintetica, varanda, decoracao"
+            class={inputClass}
           />
           <p class="text-xs text-admin-text-muted mt-1">Separe as tags por vírgula.</p>
         </div>

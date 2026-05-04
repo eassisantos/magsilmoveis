@@ -88,9 +88,12 @@ const categories = [...new Set(posts.map((p) => p.category).filter(Boolean))];
                     loading="lazy"
                   />
                 ) : (
-                  <div class="w-full h-full bg-offwhite flex items-center justify-center">
-                    <span class="text-text-muted text-sm">Magsil Móveis</span>
-                  </div>
+                  <img
+                    src="/images/blog-fallback.png"
+                    alt={post.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-slow"
+                    loading="lazy"
+                  />
                 )}
                 {post.category && (
                   <span class="absolute top-3 left-3 text-[10px] font-medium uppercase tracking-[0.15em] bg-anthracite/80 text-gold px-2.5 py-1 rounded-full">
